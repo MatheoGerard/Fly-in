@@ -1,4 +1,3 @@
-from time import sleep
 import pygame as pg
 import fly_in
 
@@ -10,11 +9,20 @@ if __name__ == "__main__":
     fly_in.draw_circle(screen, circle_pos[0], circle_pos[1])
     pg.display.flip()
 
-    for _ in range(0, 10):
+    while True:
+        events = pg.event.get()
+
+        for event in events:
+            if event.type == pg.KEYDOWN:
+                match event.key:
+                    case pg.K_ESCAPE:
+                        exit()
+                    case pg.K_SPACE:
+                        pg.display.toggle_fullscreen()
+                    case _:
+                        print(event.key)
+
         screen.fill((30, 30, 30))
-        circle_pos[0] += 10
+        circle_pos[0] += 1
         fly_in.draw_circle(screen, circle_pos[0], circle_pos[1])
         pg.display.flip()
-        sleep(1)
-
-    fly_in.read_user_input()
