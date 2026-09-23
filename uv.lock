@@ -16,14 +16,25 @@ name = "fly-in"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "parse" },
     { name = "pydantic" },
     { name = "pygame" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "parse", specifier = ">=1.22.2" },
     { name = "pydantic", specifier = ">=2.13.5" },
     { name = "pygame", specifier = ">=2.6.1" },
+]
+
+[[package]]
+name = "parse"
+version = "1.22.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c6/ee/0d009de843577b7a4893517fe517b54791e576dedd00ed9209c8498eddc2/parse-1.22.2.tar.gz", hash = "sha256:8ff0b98202798b8cefa4f8fac06b670d6d00e5ec6ecbbacaf97ac0d0e93a54e6", size = 37675, upload-time = "2026-09-18T16:45:10.111Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8e/a5/fa3a1c9cf935b6e3dedb85647ce9ee98decc830feaf63102c3b5b8a72558/parse-1.22.2-py2.py3-none-any.whl", hash = "sha256:b8ed6f889ca625b6b3aed4ec1439eb9421fde31814c2b1d550ccd8df5733a5b6", size = 21190, upload-time = "2026-09-18T16:45:09.146Z" },
 ]
 
 [[package]]
