@@ -7,9 +7,9 @@ class hub(BaseModel):
     name: str
     position: tuple[int, int]
 
-    zone_type: str = "normal"
-    color: str = "none"
-    max_drone: int = 1
+    zone_type: str
+    color: str
+    max_drone: int
 
     @model_validator(mode="after")
     def validate_rules(self) -> hub:
