@@ -1,4 +1,5 @@
 import pygame as pg
+from .hub import hub as hub_obj
 
 
 class Visualization:
@@ -41,18 +42,37 @@ class Visualization:
 
     def draw_hub(self, hubs) -> pg.rect.Rect:
         offset_x, offset_y = self.find_true_positions(hubs)
+        sub_value_x = min(hub.position[0] for hub in hubs)
+        sub_value_y = min(hub.position[1] for hub in hubs)
 
         for hub in hubs:
             pg.draw.circle(
                 self.screen,
-                (255, 255, 255),
+                hub.get_color(),
                 (
-                    (hub.position[0] - min(hub.position[0] for hub in hubs) + 1)
-                    * offset_x,
-                    (hub.position[1] - min(hub.position[1] for hub in hubs) + 1)
-                    * offset_y,
+                    hub.get_true_x(sub_value_x, offset_x),
+                    hub.get_true_y(sub_value_y, offset_y),
                 ),
-                50,
+                25,
+            )
+
+    def draw_connexions(self, connection, hubs) -> None:
+        offset_x, offset_y = self.find_true_positions(hubs)
+        sub_value_x = min(hub.position[0] for hub in hubs)
+        sub_value_y = min(hub.position[1] for hub in hubs)
+
+        for co in connection:
+            pg.draw.line(
+                self.screen,
+                pg.Color("white"),
+                (
+                    co.a.get_true_x(sub_value_x, offset_x),
+                    co.a.get_true_y(sub_value_y, offset_y),
+                ),
+                (
+                    co.b.get_true_x(sub_value_x, offset_x),
+                    co.b.get_true_y(sub_value_y, offset_y),
+                ),
             )
 
     @staticmethod
