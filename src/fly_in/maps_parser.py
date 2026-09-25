@@ -1,6 +1,6 @@
 import parse
-from pydantic import BaseModel, PositiveFloat
-from hub import hub
+from pydantic import BaseModel
+from .hub import hub
 
 
 class Parser(BaseModel):
@@ -35,9 +35,7 @@ class Parser(BaseModel):
         if "zone=" in meta:
             meta_parsed["zone"] = parse.search("zone={:w}", meta).fixed[0]
         if "max_drones=" in meta:
-            meta_parsed["max_drones"] = parse.search(
-                "max_drones={:w}", meta
-            ).fixed[0]
+            meta_parsed["max_drones"] = parse.search("max_drones={:w}", meta).fixed[0]
 
         return meta_parsed
 
@@ -69,18 +67,14 @@ class Parser(BaseModel):
                 )
                 hubs.append(new_hub)
 
-        for hub_obj in hubs:
-            print(hub_obj.name, end=" ")
-            print(hub_obj.position, end=" ")
-            print(hub_obj.zone_type, end=" ")
-            print(hub_obj.color, end=" ")
-            print(hub_obj.max_drone)
-
         return hubs
 
 
 if __name__ == "__main__":
-    parser = Parser(file_name="maps/easy/01_linear_path.txt")
+    try:
+        parser = Parser(file_name="maps/easy/01_linear_path.txt")
 
-    content: str = parser.read_map_file()
-    new = parser.create_hub(content)
+        content: str = parser.read_map_file()
+        new = parser.create_hub(content)
+    except Exception as e:
+        print(e)

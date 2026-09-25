@@ -1,28 +1,33 @@
 import pygame as pg
-import fly_in
+from fly_in import Visualization as vizu
+from fly_in import Parser
 
 if __name__ == "__main__":
-    pg.init()
+    try:
+        pars = Parser(file_name="maps/easy/01_linear_path.txt")
+        content = pars.read_map_file()
+        hubs = pars.create_hub(content)
 
-    circle_pos = [300, 300]
-    screen = fly_in.create_window()
-    fly_in.draw_circle(screen, circle_pos[0], circle_pos[1])
-    pg.display.flip()
+        pg.init()
 
-    while True:
-        events = pg.event.get()
+        circle_pos = [300, 300]
+        vizualizer = vizu()
+        vizualizer.create_window()
+        vizualizer.draw_hub(hubs)
+        vizualizer.update()
 
-        for event in events:
-            if event.type == pg.KEYDOWN:
-                match event.key:
-                    case pg.K_ESCAPE:
-                        exit()
-                    case pg.K_SPACE:
-                        pg.display.toggle_fullscreen()
-                    case _:
-                        print(event.key)
+        while True:
+            events = pg.event.get()
 
-        screen.fill((30, 30, 30))
-        circle_pos[0] += 1
-        fly_in.draw_circle(screen, circle_pos[0], circle_pos[1])
-        pg.display.flip()
+            for event in events:
+                if event.type == pg.KEYDOWN:
+                    match event.key:
+                        case pg.K_ESCAPE:
+                            exit()
+                        case pg.K_SPACE:
+                            pg.display.toggle_fullscreen()
+                        case _:
+                            print(event.key)
+
+    except Exception as e:
+        print(e)

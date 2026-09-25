@@ -5,7 +5,7 @@ from pydantic import BaseModel, model_validator
 
 class hub(BaseModel):
     name: str
-    position: tuple[int, int]
+    position: list[int]
 
     zone_type: str
     color: str
