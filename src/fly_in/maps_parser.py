@@ -75,7 +75,7 @@ class Parser(BaseModel):
 
                 new_hub: hub = hub(
                     name=mandatory[0],
-                    position=(mandatory[1], mandatory[2]),
+                    position=(mandatory[1], -mandatory[2]),
                     zone_type=optionnal.get("zone"),
                     color=optionnal.get("color"),
                     max_drone=optionnal.get("max_drones"),
@@ -96,7 +96,7 @@ class Parser(BaseModel):
 
                 new_hub: hub = hub(
                     name=mandatory[0],
-                    position=(mandatory[1], mandatory[2]),
+                    position=(mandatory[1], -mandatory[2]),
                     zone_type=optionnal.get("zone"),
                     color=optionnal.get("color"),
                     max_drone=optionnal.get("max_drones"),
@@ -115,7 +115,7 @@ class Parser(BaseModel):
 
                 new_hub: hub = hub(
                     name=mandatory[0],
-                    position=(mandatory[1], mandatory[2]),
+                    position=(mandatory[1], -mandatory[2]),
                     zone_type=optionnal.get("zone"),
                     color=optionnal.get("color"),
                     max_drone=optionnal.get("max_drones"),
@@ -129,26 +129,40 @@ class Parser(BaseModel):
         self, content: str, hubs: list[hub]
     ) -> list[Connexion]:
         connexions: list[Connexion] = []
+        base: str = ""
+        meta_link: str = ""
+        link_capacity: int
 
         for line in content.splitlines():
+            link_capacity = 1
+            meta_link: str = ""
             if line.strip().startswith("connection: "):
-                points = parse.parse("connection: {:w}-{:w}", line)
-                print(points)
-            else:
-                continue
+                if "[" in line:
+                    base, meta_link = line.split("[")
+                else:
+                    base = line
 
-            hubs_to_connected = []
+                if meta_link:
+                    link_capacity = parse.search(
+                        "max_link_capacity={:d}", meta_link.strip("[]")
+                    ).fixed[0]
 
-            if points:
-                for point in points:
-                    for hub in hubs:
-                        if point == hub.name:
-                            hubs_to_connected.append(hub)
-                new_connexion = Connexion(
-                    hubs_to_connected[0], hubs_to_connected[1]
-                )
-                connexions.append(new_connexion)
-                hubs_to_connected.clear()
+                points = parse.parse("connection: {:w}-{:w}", base.strip())
+
+                hubs_to_connected = []
+
+                if points:
+                    for point in points:
+                        for hub in hubs:
+                            if point == hub.name:
+                                hubs_to_connected.append(hub)
+                    new_connexion = Connexion(
+                        a=hubs_to_connected[0],
+                        b=hubs_to_connected[1],
+                        max_link_capacity=link_capacity,
+                    )
+                    connexions.append(new_connexion)
+                    hubs_to_connected.clear()
 
         return connexions
 

@@ -4,8 +4,8 @@ from .hub import hub as hub_obj
 
 class Visualization:
     def __init__(self) -> None:
-        self.screen_width: int = 1920
-        self.screen_height: int = 1080
+        self.screen_width: int = 2560
+        self.screen_height: int = 1440
         self.screen = self.create_window()
 
     def create_window(self):
@@ -73,6 +73,7 @@ class Visualization:
                     co.b.get_true_x(sub_value_x, offset_x),
                     co.b.get_true_y(sub_value_y, offset_y),
                 ),
+                10,
             )
 
     @staticmethod
