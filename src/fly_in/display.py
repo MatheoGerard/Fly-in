@@ -15,7 +15,9 @@ class Visualization:
         screen = pg.display.set_mode((self.screen_width, self.screen_height))
         pg.display.set_caption("Fly-In")
 
-        screen.fill((30, 30, 30))
+        image = pg.image.load("textures/backrgound/main_background.bmp")
+        screen.blit(image, (0, 0))
+
         pg.display.flip()
 
         return screen

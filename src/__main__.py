@@ -8,8 +8,6 @@ if __name__ == "__main__":
     content = pars.read_map_file()
     hubs = pars.create_hub(content)
     connexions = pars.create_connexion(content, hubs)
-    for co in connexions:
-        print(co.max_link_capacity)
 
     map_instance: Map = Map(pars.find_nb_drones(content), hubs)
 
