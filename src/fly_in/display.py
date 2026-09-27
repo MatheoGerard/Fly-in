@@ -4,8 +4,8 @@ from .hub import hub as hub_obj
 
 class Visualization:
     def __init__(self) -> None:
-        self.screen_width: int = 2560
-        self.screen_height: int = 1440
+        self.screen_width: int = 1920
+        self.screen_height: int = 1080
         self.screen = self.create_window()
 
     def create_window(self):
@@ -15,7 +15,7 @@ class Visualization:
         screen = pg.display.set_mode((self.screen_width, self.screen_height))
         pg.display.set_caption("Fly-In")
 
-        image = pg.image.load("textures/backrgound/main_background.bmp")
+        image = pg.image.load("textures/backrgound/PO_main_background.bmp")
         screen.blit(image, (0, 0))
 
         pg.display.flip()
