@@ -2,6 +2,8 @@ import pygame as pg
 from fly_in import Visualization as vizu
 from fly_in import Parser
 from fly_in import Map
+from fly_in import read_input
+from fly_in import GameState
 
 if __name__ == "__main__":
     pars = Parser(file_name="maps/hard/03_ultimate_challenge.txt")
@@ -17,6 +19,7 @@ if __name__ == "__main__":
         raise ValueError("multiple end!")
 
     pg.init()
+    game_manager = GameState()
 
     circle_pos = [300, 300]
     vizualizer = vizu()
@@ -25,15 +28,5 @@ if __name__ == "__main__":
     vizualizer.draw_hub(hubs)
     vizualizer.update()
 
-    while True:
-        events = pg.event.get()
-
-        for event in events:
-            if event.type == pg.KEYDOWN:
-                match event.key:
-                    case pg.K_ESCAPE:
-                        exit()
-                    case pg.K_SPACE:
-                        pg.display.toggle_fullscreen()  # FIXME: probleme a la sortie du full screen!
-                    case _:
-                        print(event.key)
+    while game_manager.game_running:
+        read_input()
