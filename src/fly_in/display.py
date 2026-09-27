@@ -1,5 +1,7 @@
 import pygame as pg
 from .hub import hub as hub_obj
+from .main_menu import MainMenu
+from fly_in import main_menu
 
 
 class Visualization:
@@ -15,12 +17,31 @@ class Visualization:
         screen = pg.display.set_mode((self.screen_width, self.screen_height))
         pg.display.set_caption("Fly-In")
 
-        image = pg.image.load("textures/backrgound/PO_main_background.bmp")
-        screen.blit(image, (0, 0))
-
-        pg.display.flip()
-
         return screen
+
+    def draw_background(self) -> None:
+        self.screen.fill("black")
+
+    def draw_menu_button(self, main_menu_manager: MainMenu) -> None:
+        arrow_img = pg.image.load("textures/button_test/arrow.bmp")
+
+        for but in main_menu_manager.buttons:
+            if but.is_selected:
+                self.screen.blit(
+                    arrow_img, (but.position[0] - 300, but.position[1])
+                )
+            pg.draw.rect(
+                self.screen,
+                "black",
+                (but.position[0], but.position[1], but.dim[0], but.dim[1]),
+            )
+
+    def draw_main_menu(
+        self, main_menu_manager: MainMenu, launch: bool = False
+    ) -> None:
+        if launch:
+            self.screen.blit(main_menu_manager.background, (0, 0))
+            self.draw_menu_button(main_menu_manager)
 
     @staticmethod
     def find_delta_x(hubs) -> int:

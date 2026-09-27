@@ -4,6 +4,7 @@ from fly_in import Parser
 from fly_in import Map
 from fly_in import read_input
 from fly_in import GameState
+from fly_in import MainMenu
 
 if __name__ == "__main__":
     pars = Parser(file_name="maps/hard/03_ultimate_challenge.txt")
@@ -20,13 +21,20 @@ if __name__ == "__main__":
 
     pg.init()
     game_manager = GameState()
-
-    circle_pos = [300, 300]
+    main_menu_manager: MainMenu = MainMenu(
+        "textures/backrgound/PO_main_background.bmp", game_manager, 2
+    )
+    main_menu_manager.create_button()
     vizualizer = vizu()
     vizualizer.create_window()
-    vizualizer.draw_connexions(connexions, hubs)
-    vizualizer.draw_hub(hubs)
-    vizualizer.update()
 
     while game_manager.game_running:
-        read_input()
+        if game_manager.is_main_menu:
+            vizualizer.draw_main_menu(main_menu_manager, True)
+        else:
+            vizualizer.draw_background()
+            vizualizer.draw_connexions(connexions, hubs)
+            vizualizer.draw_hub(hubs)
+
+        vizualizer.update()
+        read_input(game_manager, main_menu_manager)
