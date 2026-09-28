@@ -1,6 +1,6 @@
 import pygame as pg
 from .hub import hub as hub_obj
-from .main_menu import MainMenu
+from .main_menu import MainMenu, SelectionDif
 from fly_in import main_menu
 
 
@@ -42,6 +42,17 @@ class Visualization:
         if launch:
             self.screen.blit(main_menu_manager.background, (0, 0))
             self.draw_menu_button(main_menu_manager)
+
+    def draw_select_dif(
+        self, select_dif_manager: SelectionDif, launch: bool
+    ) -> None:
+        if launch:
+            self.screen.blit(
+                select_dif_manager.backgrounds[
+                    select_dif_manager.selection_state
+                ],
+                (0, 0),
+            )
 
     @staticmethod
     def find_delta_x(hubs) -> int:

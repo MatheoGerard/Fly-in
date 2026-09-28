@@ -51,3 +51,30 @@ class MainMenu:
             self.buttons
         )
         self.buttons[self.selection_state].is_selected = True
+
+
+class SelectionDif:
+    def __init__(self) -> None:
+        self.selection_state: int = 0
+        self.backgrounds = []
+        self.load_selection_assets()
+
+    def load_selection_assets(self) -> None:
+        self.backgrounds.append(
+            pg.image.load("textures/difficulty_selection/slect_0.bmp")
+        )
+        self.backgrounds.append(
+            pg.image.load("textures/difficulty_selection/slect_1.bmp")
+        )
+        self.backgrounds.append(
+            pg.image.load("textures/difficulty_selection/slect_2.bmp")
+        )
+        self.backgrounds.append(
+            pg.image.load("textures/difficulty_selection/slect_3.bmp")
+        )
+        print(len(self.backgrounds))
+
+    def change_selection(self, move: int) -> None:
+        self.selection_state = (self.selection_state + move) % len(
+            self.backgrounds
+        )
