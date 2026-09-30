@@ -18,7 +18,7 @@ if __name__ == "__main__":
     pg.init()
     game_manager = GameState()
     main_menu_manager: MainMenu = MainMenu(
-        "textures/Map_selection/hard_map.bmp", game_manager, 2
+        "textures/backrgound/PO_main_background.bmp", game_manager, 2
     )
     main_menu_manager.create_button()
     difficulty_select = SelectionDif()
