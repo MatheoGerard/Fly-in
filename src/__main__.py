@@ -1,6 +1,14 @@
 import pygame as pg
 from fly_in import Visualization as vizu
-from fly_in import Parser, Map, read_input, GameState, MainMenu, SelectionDif
+from fly_in import (
+    Parser,
+    Map,
+    read_input,
+    GameState,
+    MainMenu,
+    SelectionDif,
+    SelectionMap,
+)
 
 if __name__ == "__main__":
     pars = Parser(file_name="maps/hard/03_ultimate_challenge.txt")
@@ -22,6 +30,7 @@ if __name__ == "__main__":
     )
     main_menu_manager.create_button()
     difficulty_select = SelectionDif()
+    map_select = SelectionMap()
     vizualizer = vizu()
     vizualizer.create_window()
 
@@ -30,6 +39,8 @@ if __name__ == "__main__":
             vizualizer.draw_main_menu(main_menu_manager, True)
         elif game_manager.is_difficulty_select:
             vizualizer.draw_select_dif(difficulty_select, True)
+        elif game_manager.is_map_selection:
+            vizualizer.draw_select_map(difficulty_select, map_select)
         else:
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)

@@ -4,6 +4,7 @@ class GameState:
         self.is_paused = False
         self.is_main_menu = True
         self.is_difficulty_select = False
+        self.is_map_selection = False
 
     def set_paused(self) -> None:
         if self.is_paused:
@@ -22,3 +23,9 @@ class GameState:
             self.is_difficulty_select = False
         else:
             self.is_difficulty_select = True
+
+    def set_map_selector(self) -> None:
+        if self.is_map_selection:
+            self.is_map_selection = False
+        else:
+            self.is_map_selection = True

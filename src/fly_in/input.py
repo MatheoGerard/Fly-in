@@ -32,7 +32,7 @@ def read_input(
                         game_manager.set_difficulty_select()
                     elif game_manager.is_difficulty_select:
                         game_manager.set_difficulty_select()
-                        game_manager.set_main_menu()
+                        game_manager.set_map_selector()
                 case pg.K_ESCAPE:
                     if game_manager.is_difficulty_select:
                         game_manager.set_difficulty_select()
