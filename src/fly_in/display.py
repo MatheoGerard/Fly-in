@@ -58,7 +58,9 @@ class Visualization:
         self, select_dif_manager: SelectionDif, map_selector: SelectionMap
     ) -> None:
         self.screen.blit(
-            map_selector.backgrounds[select_dif_manager.selection_state][0],
+            map_selector.backgrounds[select_dif_manager.selection_state][
+                map_selector.selection_state
+            ],
             (0, 0),
         )
 

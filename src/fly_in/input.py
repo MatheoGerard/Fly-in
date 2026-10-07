@@ -1,6 +1,6 @@
 import pygame as pg
 
-from .main_menu import MainMenu, SelectionDif
+from .main_menu import MainMenu, SelectionDif, SelectionMap
 from .game_state import GameState
 
 
@@ -8,6 +8,7 @@ def read_input(
     game_manager: GameState,
     main_menu_manager: MainMenu,
     dif_select_manager: SelectionDif,
+    map_selector: SelectionMap,
 ) -> None:
     events = pg.event.get()
 
@@ -19,11 +20,15 @@ def read_input(
                         main_menu_manager.change_selection(1)
                     elif game_manager.is_difficulty_select:
                         dif_select_manager.change_selection(-1)
+                    elif game_manager.is_map_selection:
+                        map_selector.change_selection(-1)
                 case pg.K_UP:
                     if game_manager.is_main_menu:
                         main_menu_manager.change_selection(1)
                     elif game_manager.is_difficulty_select:
                         dif_select_manager.change_selection(1)
+                    elif game_manager.is_map_selection:
+                        map_selector.change_selection(1)
                 case pg.K_RETURN:
                     if game_manager.is_main_menu:
                         if main_menu_manager.selection_state == 1:

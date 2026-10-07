@@ -83,11 +83,22 @@ class SelectionDif:
 class SelectionMap:
     def __init__(self) -> None:
         self.backgrounds: dict[int, list[pg.Surface]] = {}
+        self.selection_state: int = 0
         self.load_assets()
 
     def load_assets(self) -> None:
         self.backgrounds.update(
-            {0: [pg.image.load("textures/Map_selection/prairie.bmp")]}
+            {
+                0: [
+                    pg.image.load("textures/Map_selection/prairie_select.bmp"),
+                    pg.image.load(
+                        "textures/Map_selection/prairie_select01.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/prairie_select02.bmp"
+                    ),
+                ]
+            }
         )
         self.backgrounds.update(
             {1: [pg.image.load("textures/Map_selection/medium_map.bmp")]}
@@ -95,3 +106,6 @@ class SelectionMap:
         self.backgrounds.update(
             {2: [pg.image.load("textures/Map_selection/hard_map.bmp")]}
         )
+
+    def change_selection(self, move: int) -> None:
+        self.selection_state = (self.selection_state + move) % 3

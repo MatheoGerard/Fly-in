@@ -47,4 +47,6 @@ if __name__ == "__main__":
             vizualizer.draw_hub(hubs)
 
         vizualizer.update()
-        read_input(game_manager, main_menu_manager, difficulty_select)
+        read_input(
+            game_manager, main_menu_manager, difficulty_select, map_select
+        )
