@@ -38,10 +38,19 @@ def read_input(
                     elif game_manager.is_difficulty_select:
                         game_manager.set_difficulty_select()
                         game_manager.set_map_selector()
+                    elif game_manager.is_map_selection:
+                        game_manager.set_map_selector()
+                        game_manager.set_in_map()
                 case pg.K_ESCAPE:
                     if game_manager.is_difficulty_select:
                         game_manager.set_difficulty_select()
                         game_manager.set_main_menu()
+                    elif game_manager.is_map_selection:
+                        game_manager.set_map_selector()
+                        game_manager.set_difficulty_select()
+                    elif game_manager.is_in_map:
+                        game_manager.set_in_map()
+                        game_manager.set_map_selector()
                 case pg.K_SPACE:
                     pg.display.toggle_fullscreen()  # FIXME: probleme a la sortie du full screen!
                 case _:
