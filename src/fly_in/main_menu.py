@@ -101,7 +101,19 @@ class SelectionMap:
             }
         )
         self.backgrounds.update(
-            {1: [pg.image.load("textures/Map_selection/medium_map.bmp")]}
+            {
+                1: [
+                    pg.image.load(
+                        "textures/Map_selection/medium_map_select.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/medium_map_select_01.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/medium_map_select_02.bmp"
+                    ),
+                ]
+            }
         )
         self.backgrounds.update(
             {2: [pg.image.load("textures/Map_selection/hard_map.bmp")]}
