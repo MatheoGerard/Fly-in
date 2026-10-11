@@ -108,6 +108,17 @@ class SelectionMap:
                 ]
             }
         )
+        self.backgrounds.update(
+            {
+                3: [
+                    pg.image.load("textures/Map_selection/challenger_select.bmp"),
+                ]
+            }
+        )
 
-    def change_selection(self, move: int) -> None:
-        self.selection_state = (self.selection_state + move) % 3
+    def change_selection(self, move: int, difficulty: SelectionDif) -> None:
+        if difficulty.selection_state != 3:
+            self.selection_state = (self.selection_state + move) % 3
+        else:
+            self.selection_state = 0
+            self.selection_state = (self.selection_state + move) % 1

@@ -21,14 +21,14 @@ def read_input(
                     elif game_manager.is_difficulty_select:
                         dif_select_manager.change_selection(-1)
                     elif game_manager.is_map_selection:
-                        map_selector.change_selection(-1)
+                        map_selector.change_selection(-1, dif_select_manager)
                 case pg.K_UP:
                     if game_manager.is_main_menu:
                         main_menu_manager.change_selection(1)
                     elif game_manager.is_difficulty_select:
                         dif_select_manager.change_selection(1)
                     elif game_manager.is_map_selection:
-                        map_selector.change_selection(1)
+                        map_selector.change_selection(1, dif_select_manager)
                 case pg.K_RETURN:
                     if game_manager.is_main_menu:
                         if main_menu_manager.selection_state == 1:
