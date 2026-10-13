@@ -1,7 +1,36 @@
 import pygame as pg
 
+from .display import Visualization as visu
+from .hub import hub
 from .main_menu import MainMenu, SelectionDif, SelectionMap
 from .game_state import GameState
+
+
+def mouse_hover(dis: visu, hubs: list[hub]) -> None:
+    offset_x, offset_y = dis.find_true_positions(hubs)
+    sub_value_x = min(hub.position[0] for hub in hubs)
+    sub_value_y = min(hub.position[1] for hub in hubs)
+
+    for points in hubs:
+        if (
+            points.get_true_x(sub_value_x, offset_x) - 25
+            <= pg.mouse.get_pos()[0]
+            and points.get_true_x(sub_value_x, offset_x) + 25
+            >= pg.mouse.get_pos()[0]
+        ):
+            if (
+                points.get_true_y(sub_value_y, offset_y) - 25
+                <= pg.mouse.get_pos()[1]
+                and points.get_true_y(sub_value_y, offset_y) + 25
+                >= pg.mouse.get_pos()[1]
+            ):
+                dis.draw_hub_name(
+                    points.name,
+                    [
+                        points.get_true_x(sub_value_x, offset_x),
+                        points.get_true_y(sub_value_y, offset_y),
+                    ],
+                )
 
 
 def read_input(

@@ -1,7 +1,7 @@
 from .display import Visualization
 from .maps_parser import Parser
 from .map_class import Map
-from .input import read_input
+from .input import read_input, mouse_hover
 from .game_state import GameState
 from .main_menu import MainMenu, SelectionDif, SelectionMap
 
@@ -14,4 +14,5 @@ __all__ = [
     "MainMenu",
     "SelectionDif",
     "SelectionMap",
+    "mouse_hover",
 ]

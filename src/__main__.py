@@ -8,6 +8,7 @@ from fly_in import (
     MainMenu,
     SelectionDif,
     SelectionMap,
+    mouse_hover,
 )
 
 
@@ -38,6 +39,8 @@ if __name__ == "__main__":
     maps_path: list[list[str]] = load_maps()
 
     pg.init()
+    pg.font.init()
+
     game_manager = GameState()
     main_menu_manager: MainMenu = MainMenu(
         "textures/backrgound/PO_main_background.bmp", game_manager, 2
@@ -74,6 +77,7 @@ if __name__ == "__main__":
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)
             vizualizer.draw_hub(hubs)
+            mouse_hover(vizualizer, hubs)
 
         vizualizer.update()
         read_input(

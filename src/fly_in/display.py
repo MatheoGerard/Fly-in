@@ -100,6 +100,12 @@ class Visualization:
                 25,
             )
 
+    def draw_hub_name(self, name: str, pos: list[int]) -> None:
+        hub_txt = pg.font.SysFont("Comic Sans MS", 30)
+        txt_surface = hub_txt.render(name, False, "white")
+
+        self.screen.blit(txt_surface, pos)
+
     def draw_connexions(self, connection, hubs) -> None:
         offset_x, offset_y = self.find_true_positions(hubs)
         sub_value_x = min(hub.position[0] for hub in hubs)
