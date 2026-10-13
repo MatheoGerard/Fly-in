@@ -46,9 +46,11 @@ def read_input(
                         game_manager.set_difficulty_select()
                         game_manager.set_main_menu()
                     elif game_manager.is_map_selection:
+                        map_selector.selection_state = 0
                         game_manager.set_map_selector()
                         game_manager.set_difficulty_select()
                     elif game_manager.is_in_map:
+                        map_selector.selection_state = 0
                         game_manager.set_in_map()
                         game_manager.set_map_selector()
                 case pg.K_SPACE:
