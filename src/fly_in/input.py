@@ -25,7 +25,7 @@ def mouse_hover(dis: visu, hubs: list[hub]) -> None:
                 >= pg.mouse.get_pos()[1]
             ):
                 dis.draw_hub_name(
-                    points.name,
+                    points,
                     [
                         points.get_true_x(sub_value_x, offset_x),
                         points.get_true_y(sub_value_y, offset_y),

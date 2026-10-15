@@ -84,7 +84,7 @@ class Visualization:
             int(self.screen_height / self.find_delta_y(hubs)),
         ]
 
-    def draw_hub(self, hubs) -> pg.rect.Rect:
+    def draw_hub(self, hubs) -> None:
         offset_x, offset_y = self.find_true_positions(hubs)
         sub_value_x = min(hub.position[0] for hub in hubs)
         sub_value_y = min(hub.position[1] for hub in hubs)
@@ -100,11 +100,13 @@ class Visualization:
                 25,
             )
 
-    def draw_hub_name(self, name: str, pos: list[int]) -> None:
-        hub_txt = pg.font.SysFont("Comic Sans MS", 30)
-        txt_surface = hub_txt.render(name, False, "white")
+    def draw_hub_name(self, point: hub_obj, pos: list[int]) -> None:
+        hub_txt = pg.font.SysFont("Comic Sans MS", 75)
+        txt_surface = hub_txt.render(point.name, False, "white")
+        for link in point.neighbor:
+            print(link.name)
 
-        self.screen.blit(txt_surface, pos)
+        self.screen.blit(txt_surface, [pos[0], pos[1] + 30])
 
     def draw_connexions(self, connection, hubs) -> None:
         offset_x, offset_y = self.find_true_positions(hubs)

@@ -68,7 +68,9 @@ if __name__ == "__main__":
             hubs = pars.create_hub(content)
             connexions = pars.create_connexion(content, hubs)
 
-            map_instance: Map = Map(pars.find_nb_drones(content), hubs)
+            map_instance: Map = Map(
+                pars.find_nb_drones(content), hubs, connexions
+            )
 
             if not map_instance.start_ok:
                 raise ValueError("multiple start!")

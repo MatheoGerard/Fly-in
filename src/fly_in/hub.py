@@ -13,6 +13,8 @@ class hub(BaseModel):
     max_drone: int
     state: int
 
+    neighbor: list[hub] = []
+
     def get_color(self) -> Color | str:
         if self.color == "none" or self.color == "rainbow":
             return Color("aqua")

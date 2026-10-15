@@ -1,14 +1,24 @@
+from .connexion import Connexion
 from .hub import hub
 
 
 class Map:
-    def __init__(self, nb_drone: int, hubs: list[hub]) -> None:
+    def __init__(
+        self, nb_drone: int, hubs: list[hub], connexions: list[Connexion]
+    ) -> None:
         self.nb_drone: int = nb_drone
         self.hubs: list[hub] = hubs
+        self.connexions: list[Connexion] = connexions
         self.start: hub = self.find_start()
         self.finish: hub = self.find_end()
         self.start_ok: bool = self.validate_start()
         self.end_ok: bool = self.validate_end()
+        self.link_hubs()
+
+    def link_hubs(self) -> None:
+        for co in self.connexions:
+            co.a.neighbor.append(co.b)
+            co.b.neighbor.append(co.a)
 
     def validate_start(self) -> bool:
         start_nb: int = 0
