@@ -36,14 +36,16 @@ class Parser(BaseModel):
         if "zone=" in meta:
             meta_parsed["zone"] = parse.search("zone={:w}", meta).fixed[0]
         if "max_drones=" in meta:
-            meta_parsed["max_drones"] = parse.search("max_drones={:w}", meta).fixed[0]
+            meta_parsed["max_drones"] = parse.search(
+                "max_drones={:w}", meta
+            ).fixed[0]
 
         return meta_parsed
 
     def find_nb_drones(self, content) -> int | None:
-        for line in content:
-            if line.strip().startswith("nb_drones: "):
-                return int(parse.search("nb_drones: {:d}", line).fixed[0])
+        for line in content.splitlines():
+            if line.startswith("nb_drones: "):
+                return parse.search("nb_drones: {:d}", line).fixed[0]
 
         return None
 
@@ -65,7 +67,9 @@ class Parser(BaseModel):
                     base, meta = line.split("[")
                 else:
                     base = line
-                mandatory = parse.parse("end_hub: {:w} {:d} {:d}", base.strip())
+                mandatory = parse.parse(
+                    "end_hub: {:w} {:d} {:d}", base.strip()
+                )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
 
@@ -84,7 +88,9 @@ class Parser(BaseModel):
                     base, meta = line.split("[")
                 else:
                     base = line
-                mandatory = parse.parse("start_hub: {:w} {:d} {:d}", base.strip())
+                mandatory = parse.parse(
+                    "start_hub: {:w} {:d} {:d}", base.strip()
+                )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
 
@@ -119,7 +125,9 @@ class Parser(BaseModel):
 
         return hubs
 
-    def create_connexion(self, content: str, hubs: list[hub]) -> list[Connexion]:
+    def create_connexion(
+        self, content: str, hubs: list[hub]
+    ) -> list[Connexion]:
         connexions: list[Connexion] = []
         base: str = ""
         meta_link: str = ""

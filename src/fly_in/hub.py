@@ -14,6 +14,18 @@ class hub(BaseModel):
     state: int
 
     neighbor: list[hub] = []
+    cost: int = 0
+
+    def define_cost(self) -> None:
+        match self.zone_type:
+            case "blocked":
+                self.cost = 10
+            case "restricted":
+                self.cost = 3
+            case "priority":
+                self.cost = 1
+            case _:
+                self.cost = 2
 
     def get_color(self) -> Color | str:
         if self.color == "none" or self.color == "rainbow":

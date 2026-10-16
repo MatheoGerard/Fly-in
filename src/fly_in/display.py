@@ -103,6 +103,8 @@ class Visualization:
     def draw_hub_name(self, point: hub_obj, pos: list[int]) -> None:
         hub_txt = pg.font.SysFont("Comic Sans MS", 75)
         txt_surface = hub_txt.render(point.name, False, "white")
+        print(point.zone_type)
+        print(point.cost)
         for link in point.neighbor:
             print(link.name)
 

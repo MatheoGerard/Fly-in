@@ -65,17 +65,24 @@ if __name__ == "__main__":
                 ]
             )
             content = pars.read_map_file()
+            nb_drone = pars.find_nb_drones(content)
             hubs = pars.create_hub(content)
+
+            for hub in hubs:
+                hub.define_cost()
+
             connexions = pars.create_connexion(content, hubs)
 
-            map_instance: Map = Map(
-                pars.find_nb_drones(content), hubs, connexions
-            )
+            map_instance: Map = Map(nb_drone, hubs, connexions)
 
             if not map_instance.start_ok:
                 raise ValueError("multiple start!")
             if not map_instance.end_ok:
                 raise ValueError("multiple end!")
+
+            for d in map_instance.drones:
+                print(f"idx: {d.index} -> {d.current_hub.name}")
+
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)
             vizualizer.draw_hub(hubs)

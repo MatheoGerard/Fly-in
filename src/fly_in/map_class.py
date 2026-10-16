@@ -1,5 +1,6 @@
 from .connexion import Connexion
 from .hub import hub
+from .drone import Drone
 
 
 class Map:
@@ -13,12 +14,22 @@ class Map:
         self.finish: hub = self.find_end()
         self.start_ok: bool = self.validate_start()
         self.end_ok: bool = self.validate_end()
+        self.drones: list[Drone] = self.create_drone()
         self.link_hubs()
 
     def link_hubs(self) -> None:
         for co in self.connexions:
             co.a.neighbor.append(co.b)
             co.b.neighbor.append(co.a)
+
+    def create_drone(self) -> list[Drone]:
+        r = range(0, self.nb_drone)
+        drones: list[Drone] = []
+
+        for i in r:
+            drones.append(Drone(self.start, i))
+
+        return drones
 
     def validate_start(self) -> bool:
         start_nb: int = 0
