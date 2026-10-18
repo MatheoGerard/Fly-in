@@ -1,5 +1,5 @@
 import pygame as pg
-from fly_in import Visualization as vizu
+from fly_in import Visualization as vizu, drone
 from fly_in import (
     Parser,
     Map,
@@ -50,6 +50,7 @@ if __name__ == "__main__":
     map_select = SelectionMap()
     vizualizer = vizu()
     vizualizer.create_window()
+    map_instance: Map | None = None
 
     while game_manager.game_running:
         if game_manager.is_main_menu:
@@ -73,7 +74,7 @@ if __name__ == "__main__":
 
             connexions = pars.create_connexion(content, hubs)
 
-            map_instance: Map = Map(nb_drone, hubs, connexions)
+            map_instance = Map(nb_drone, hubs, connexions)
 
             for d in map_instance.drones:
                 d.define_start_position(hubs, vizualizer)
@@ -85,7 +86,7 @@ if __name__ == "__main__":
                 raise ValueError("multiple end!")
 
             for d in map_instance.drones:
-                print(f"idx: {d.index} -> {d.current_hub.name}")
+                d.find_way()
 
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)
@@ -95,5 +96,9 @@ if __name__ == "__main__":
 
         vizualizer.update()
         read_input(
-            game_manager, main_menu_manager, difficulty_select, map_select
+            game_manager,
+            main_menu_manager,
+            difficulty_select,
+            map_select,
+            map_instance,
         )

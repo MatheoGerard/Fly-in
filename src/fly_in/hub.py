@@ -15,6 +15,8 @@ class hub(BaseModel):
 
     neighbor: list[hub] = []
     cost: int = 0
+    current_nb_drone: int = 0
+    visited: bool = False
 
     def define_cost(self) -> None:
         match self.zone_type:
@@ -38,6 +40,14 @@ class hub(BaseModel):
 
     def get_true_y(self, sub_value, offset_y) -> int:
         return (self.position[1] - sub_value + 1) * offset_y
+
+    def update_current_nb_drone(self, change_value: int) -> None:
+        self.current_nb_drone += change_value
+
+    def is_full(self) -> bool:
+        if self.current_nb_drone == self.max_drone:
+            return True
+        return False
 
     @model_validator(mode="after")
     def validate_rules(self) -> hub:

@@ -4,6 +4,7 @@ from .display import Visualization as visu
 from .hub import hub
 from .main_menu import MainMenu, SelectionDif, SelectionMap
 from .game_state import GameState
+from .map_class import Map
 
 
 def mouse_hover(dis: visu, hubs: list[hub]) -> None:
@@ -38,6 +39,7 @@ def read_input(
     main_menu_manager: MainMenu,
     dif_select_manager: SelectionDif,
     map_selector: SelectionMap,
+    map_instance: Map,
 ) -> None:
     events = pg.event.get()
 
@@ -58,6 +60,10 @@ def read_input(
                         dif_select_manager.change_selection(1)
                     elif game_manager.is_map_selection:
                         map_selector.change_selection(1, dif_select_manager)
+                    elif game_manager.is_in_map:
+                        if map_instance:
+                            for d in map_instance.drones:
+                                d.move()
                 case pg.K_RETURN:
                     if game_manager.is_main_menu:
                         if main_menu_manager.selection_state == 1:
@@ -83,6 +89,6 @@ def read_input(
                         game_manager.set_in_map()
                         game_manager.set_map_selector()
                 case pg.K_SPACE:
-                    pg.display.toggle_fullscreen()  # FIXME: probleme a la sortie du full screen!
+                    pg.display.toggle_fullscreen()
                 case _:
                     print(event.key)
