@@ -27,7 +27,9 @@ class Map:
         drones: list[Drone] = []
 
         for i in r:
-            drones.append(Drone(self.start, i))
+            drones.append(
+                Drone(self.start, i, "textures/perso/pirate_sprite.bmp")
+            )
 
         return drones
 

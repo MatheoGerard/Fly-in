@@ -75,6 +75,10 @@ if __name__ == "__main__":
 
             map_instance: Map = Map(nb_drone, hubs, connexions)
 
+            for d in map_instance.drones:
+                d.define_start_position(hubs, vizualizer)
+                d.current_position = d.start_position
+
             if not map_instance.start_ok:
                 raise ValueError("multiple start!")
             if not map_instance.end_ok:
@@ -86,6 +90,7 @@ if __name__ == "__main__":
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)
             vizualizer.draw_hub(hubs)
+            vizualizer.draw_drones(map_instance.drones)
             mouse_hover(vizualizer, hubs)
 
         vizualizer.update()

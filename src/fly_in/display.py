@@ -1,7 +1,7 @@
 import pygame as pg
+from .drone import Drone
 from .hub import hub as hub_obj
 from .main_menu import MainMenu, SelectionDif, SelectionMap
-from fly_in import main_menu
 
 
 class Visualization:
@@ -84,6 +84,17 @@ class Visualization:
             int(self.screen_height / self.find_delta_y(hubs)),
         ]
 
+    def draw_drones(self, drones: list[Drone]) -> None:
+        for d in drones:
+            print(d.current_position)
+            self.screen.blit(
+                d.texture,
+                (
+                    d.current_position[0] - int(d.texture.get_width() / 2),
+                    d.current_position[1] - int(d.texture.get_height() / 2),
+                ),
+            )
+
     def draw_hub(self, hubs) -> None:
         offset_x, offset_y = self.find_true_positions(hubs)
         sub_value_x = min(hub.position[0] for hub in hubs)
@@ -108,7 +119,10 @@ class Visualization:
         for link in point.neighbor:
             print(link.name)
 
-        self.screen.blit(txt_surface, [pos[0], pos[1] + 30])
+        self.screen.blit(
+            txt_surface,
+            [pos[0] - int(txt_surface.get_width() / 2), pos[1] + 30],
+        )
 
     def draw_connexions(self, connection, hubs) -> None:
         offset_x, offset_y = self.find_true_positions(hubs)
