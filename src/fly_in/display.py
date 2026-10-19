@@ -35,6 +35,18 @@ class Visualization:
                 "black",
                 (but.position[0], but.position[1], but.dim[0], but.dim[1]),
             )
+            but_txt = pg.font.SysFont("Comic Sans MS", 75)
+            txt = but_txt.render(but.text, False, "white")
+
+            self.screen.blit(
+                txt,
+                [
+                    but.position[0]
+                    + int(but.dim[0] / 2)
+                    - int(txt.get_width() / 2),
+                    but.position[1] + int(but.dim[1] / 2),
+                ],
+            )
 
     def draw_main_menu(
         self, main_menu_manager: MainMenu, launch: bool = False
@@ -86,7 +98,6 @@ class Visualization:
 
     def draw_drones(self, drones: list[Drone]) -> None:
         for d in drones:
-            print(d.current_position)
             self.screen.blit(
                 d.texture,
                 (

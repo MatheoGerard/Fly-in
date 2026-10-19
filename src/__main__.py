@@ -10,6 +10,7 @@ from fly_in import (
     SelectionMap,
     mouse_hover,
 )
+from fly_in.connexion import Connexion
 
 
 def load_maps() -> list[list[str]]:
@@ -41,6 +42,8 @@ if __name__ == "__main__":
     pg.init()
     pg.font.init()
 
+    is_parsed: bool = False
+
     game_manager = GameState()
     main_menu_manager: MainMenu = MainMenu(
         "textures/backrgound/PO_main_background.bmp", game_manager, 2
@@ -52,41 +55,51 @@ if __name__ == "__main__":
     vizualizer.create_window()
     map_instance: Map | None = None
 
+    content: str = ""
+    connexions: list[Connexion] = []
+    hubs = []
+
     while game_manager.game_running:
         if game_manager.is_main_menu:
             vizualizer.draw_main_menu(main_menu_manager, True)
+            is_parsed = False
         elif game_manager.is_difficulty_select:
             vizualizer.draw_select_dif(difficulty_select, True)
+            is_parsed = False
         elif game_manager.is_map_selection:
             vizualizer.draw_select_map(difficulty_select, map_select)
+            is_parsed = False
         elif game_manager.is_in_map:
-            pars = Parser(
-                file_name=maps_path[difficulty_select.selection_state][
-                    map_select.selection_state
-                ]
-            )
-            content = pars.read_map_file()
-            nb_drone = pars.find_nb_drones(content)
-            hubs = pars.create_hub(content)
+            if not is_parsed:
+                pars = Parser(
+                    file_name=maps_path[difficulty_select.selection_state][
+                        map_select.selection_state
+                    ]
+                )
+                content = pars.read_map_file()
+                nb_drone = pars.find_nb_drones(content)
+                hubs = pars.create_hub(content)
 
-            for hub in hubs:
-                hub.define_cost()
+                for hub in hubs:
+                    hub.define_cost()
 
-            connexions = pars.create_connexion(content, hubs)
+                connexions = pars.create_connexion(content, hubs)
 
-            map_instance = Map(nb_drone, hubs, connexions)
+                map_instance = Map(nb_drone, hubs, connexions)
 
-            for d in map_instance.drones:
-                d.define_start_position(hubs, vizualizer)
-                d.current_position = d.start_position
+                for d in map_instance.drones:
+                    d.define_start_position(hubs, vizualizer)
+                    d.current_position = d.start_position
 
-            if not map_instance.start_ok:
-                raise ValueError("multiple start!")
-            if not map_instance.end_ok:
-                raise ValueError("multiple end!")
+                if not map_instance.start_ok:
+                    raise ValueError("multiple start!")
+                if not map_instance.end_ok:
+                    raise ValueError("multiple end!")
 
-            for d in map_instance.drones:
-                d.find_way()
+                for d in map_instance.drones:
+                    d.find_way()
+
+                is_parsed = True
 
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)
