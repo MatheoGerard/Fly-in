@@ -40,6 +40,7 @@ def read_input(
     dif_select_manager: SelectionDif,
     map_selector: SelectionMap,
     map_instance: Map,
+    visu,
 ) -> None:
     events = pg.event.get()
 
@@ -53,6 +54,10 @@ def read_input(
                         dif_select_manager.change_selection(-1)
                     elif game_manager.is_map_selection:
                         map_selector.change_selection(-1, dif_select_manager)
+                    elif game_manager.is_in_map:
+                        if map_instance:
+                            for d in map_instance.drones:
+                                d.move(map_instance.hubs, visu, -1)
                 case pg.K_UP:
                     if game_manager.is_main_menu:
                         main_menu_manager.change_selection(1)
@@ -63,7 +68,7 @@ def read_input(
                     elif game_manager.is_in_map:
                         if map_instance:
                             for d in map_instance.drones:
-                                d.move()
+                                d.move(map_instance.hubs, visu, 1)
                 case pg.K_RETURN:
                     if game_manager.is_main_menu:
                         if main_menu_manager.selection_state == 1:

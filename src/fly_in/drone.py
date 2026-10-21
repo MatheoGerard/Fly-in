@@ -9,6 +9,7 @@ class Drone:
         index: int,
         text_path: str,
     ) -> None:
+        self.step = 0
         self.current_hub: hub = current_hub
         self.last_hub: hub | None = None
         self.start_position: list[int] = []
@@ -31,9 +32,19 @@ class Drone:
     def laod_texture(self, path: str) -> pg.surface.Surface:
         return pg.image.load(path)
 
-    def change_current_hub(self, new_hub: hub) -> None:
+    def change_current_hub(self, hubs: list[hub], visu, new_hub: hub) -> None:
+        offset_x, offset_y = visu.find_true_positions(hubs)
+        sub_value_x = min(hub.position[0] for hub in hubs)
+        sub_value_y = min(hub.position[1] for hub in hubs)
+
         self.last_hub = self.current_hub
         self.current_hub = new_hub
+        self.start_position = [
+            new_hub.get_true_x(sub_value_x, offset_x),
+            new_hub.get_true_y(sub_value_y, offset_y),
+        ]
+        self.current_position = self.start_position
+        self.define_start_position(hubs, visu)
 
         self.last_hub.current_nb_drone -= 1
         self.current_hub.current_nb_drone += 1
@@ -41,8 +52,19 @@ class Drone:
         if new_hub.state == 2:
             self.is_on_end = True
 
-    def move(self) -> None:
-        self.change_current_hub(self.true_way[0])
+    def move(self, hubs: list[hub], visu, action: int) -> None:
+        if action == 1:
+            if self.step < len(self.true_way) - 1:
+                self.step += action
+                self.change_current_hub(hubs, visu, self.true_way[self.step])
+            else:
+                print("on the end point")
+        else:
+            if self.step > 0:
+                self.step += action
+                self.change_current_hub(hubs, visu, self.true_way[self.step])
+            else:
+                print("on the start point")
 
     def find_way(self) -> None:
         ways: list[list[hub]] = []

@@ -90,6 +90,7 @@ if __name__ == "__main__":
                 for d in map_instance.drones:
                     d.define_start_position(hubs, vizualizer)
                     d.current_position = d.start_position
+                    print(d.start_position)
 
                 if not map_instance.start_ok:
                     raise ValueError("multiple start!")
@@ -107,11 +108,12 @@ if __name__ == "__main__":
             vizualizer.draw_drones(map_instance.drones)
             mouse_hover(vizualizer, hubs)
 
-        vizualizer.update()
         read_input(
             game_manager,
             main_menu_manager,
             difficulty_select,
             map_select,
             map_instance,
+            vizualizer,
         )
+        vizualizer.update()
