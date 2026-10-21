@@ -3,7 +3,9 @@ from .game_state import GameState
 
 
 class Button:
-    def __init__(self, selected: bool, text_in_button: str, x: int, y: int) -> None:
+    def __init__(
+        self, selected: bool, text_in_button: str, x: int, y: int
+    ) -> None:
         self.is_selected: bool = selected
         self.text: str = text_in_button
         self.position: list[int] = [x, y]
@@ -45,7 +47,9 @@ class MainMenu:
 
     def change_selection(self, move: int) -> None:
         self.buttons[self.selection_state].is_selected = False
-        self.selection_state = (self.selection_state + move) % len(self.buttons)
+        self.selection_state = (self.selection_state + move) % len(
+            self.buttons
+        )
         self.buttons[self.selection_state].is_selected = True
 
 
@@ -68,10 +72,11 @@ class SelectionDif:
         self.backgrounds.append(
             pg.image.load("textures/difficulty_selection/slect_3.bmp")
         )
-        print(len(self.backgrounds))
 
     def change_selection(self, move: int) -> None:
-        self.selection_state = (self.selection_state + move) % len(self.backgrounds)
+        self.selection_state = (self.selection_state + move) % len(
+            self.backgrounds
+        )
 
 
 class SelectionMap:
@@ -85,33 +90,51 @@ class SelectionMap:
             {
                 0: [
                     pg.image.load("textures/Map_selection/prairie_select.bmp"),
-                    pg.image.load("textures/Map_selection/prairie_select01.bmp"),
-                    pg.image.load("textures/Map_selection/prairie_select02.bmp"),
+                    pg.image.load(
+                        "textures/Map_selection/prairie_select01.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/prairie_select02.bmp"
+                    ),
                 ]
             }
         )
         self.backgrounds.update(
             {
                 1: [
-                    pg.image.load("textures/Map_selection/medium_map_select.bmp"),
-                    pg.image.load("textures/Map_selection/medium_map_select_01.bmp"),
-                    pg.image.load("textures/Map_selection/medium_map_select_02.bmp"),
+                    pg.image.load(
+                        "textures/Map_selection/medium_map_select.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/medium_map_select_01.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/medium_map_select_02.bmp"
+                    ),
                 ]
             }
         )
         self.backgrounds.update(
             {
                 2: [
-                    pg.image.load("textures/Map_selection/hard_map_select_00.bmp"),
-                    pg.image.load("textures/Map_selection/hard_map_select_01.bmp"),
-                    pg.image.load("textures/Map_selection/hard_map_select_02.bmp"),
+                    pg.image.load(
+                        "textures/Map_selection/hard_map_select_00.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/hard_map_select_01.bmp"
+                    ),
+                    pg.image.load(
+                        "textures/Map_selection/hard_map_select_02.bmp"
+                    ),
                 ]
             }
         )
         self.backgrounds.update(
             {
                 3: [
-                    pg.image.load("textures/Map_selection/challenger_select.bmp"),
+                    pg.image.load(
+                        "textures/Map_selection/challenger_select.bmp"
+                    ),
                 ]
             }
         )

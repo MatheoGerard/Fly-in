@@ -39,6 +39,9 @@ class Drone:
 
         self.last_hub = self.current_hub
         self.current_hub = new_hub
+        print(f"last hub is {self.last_hub.name}")
+        print(f"new hub is {new_hub.name}")
+        print(f"current is {self.current_hub.name}")
         self.start_position = [
             new_hub.get_true_x(sub_value_x, offset_x),
             new_hub.get_true_y(sub_value_y, offset_y),
@@ -52,23 +55,16 @@ class Drone:
         if new_hub.state == 2:
             self.is_on_end = True
 
-    def move(self, hubs: list[hub], visu, action: int) -> None:
-        if action == 1:
-            if self.step < len(self.true_way) - 1:
-                self.step += action
-                self.change_current_hub(hubs, visu, self.true_way[self.step])
-            else:
-                print("on the end point")
+    def move(self, hubs: list[hub], visu, map_instance) -> None:
+        if self.current_hub is not map_instance.finish:
+            self.change_current_hub(hubs, visu, self.true_way[0])
         else:
-            if self.step > 0:
-                self.step += action
-                self.change_current_hub(hubs, visu, self.true_way[self.step])
-            else:
-                print("on the start point")
+            print("on the end point")
 
-    def find_way(self) -> None:
+    def find_way(self, current: hub) -> None:
+        print(f"on part de {current.name}")
         ways: list[list[hub]] = []
-        start_list: list[hub] = [self.current_hub]
+        start_list: list[hub] = [current]
         find: bool = False
         ways.append(start_list)
         true_way: list[hub] = []
@@ -97,13 +93,12 @@ class Drone:
 
                 if not possibilities:
                     print("no ways")
-                    break
+                    return
 
                 for p in possibilities:
                     new_list: list[hub] = way.copy()
                     new_list.append(p)
                     ways.append(new_list)
 
-        self.true_way = true_way
-        for h in self.true_way:
-            print(h.name)
+        self.true_way = true_way[1:]
+        print([name.name for name in self.true_way])

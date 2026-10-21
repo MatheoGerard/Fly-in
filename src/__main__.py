@@ -90,15 +90,11 @@ if __name__ == "__main__":
                 for d in map_instance.drones:
                     d.define_start_position(hubs, vizualizer)
                     d.current_position = d.start_position
-                    print(d.start_position)
 
                 if not map_instance.start_ok:
                     raise ValueError("multiple start!")
                 if not map_instance.end_ok:
                     raise ValueError("multiple end!")
-
-                for d in map_instance.drones:
-                    d.find_way()
 
                 is_parsed = True
 

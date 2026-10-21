@@ -7,7 +7,7 @@ from pydantic import model_validator, BaseModel, ValidationError
 class Connexion(BaseModel):
     a: hub
     b: hub
-    max_link_capacity: int
+    max_link_capacity: int = 1
 
     @model_validator(mode="after")
     def validate_rules(self) -> Connexion:
