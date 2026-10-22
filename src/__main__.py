@@ -86,10 +86,14 @@ if __name__ == "__main__":
                 connexions = pars.create_connexion(content, hubs)
 
                 map_instance = Map(nb_drone, hubs, connexions)
+                map_instance.finish.max_drone = 999999999999999999999999999999
+                print(f"finish: {map_instance.finish.name}", flush=True)
 
                 for d in map_instance.drones:
+                    print("coucou")
                     d.define_start_position(hubs, vizualizer)
                     d.current_position = d.start_position
+                    d.dijsktra(map_instance)
 
                 if not map_instance.start_ok:
                     raise ValueError("multiple start!")

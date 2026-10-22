@@ -1,3 +1,4 @@
+import heapq
 import pygame as pg
 from .hub import hub
 
@@ -56,49 +57,45 @@ class Drone:
             self.is_on_end = True
 
     def move(self, hubs: list[hub], visu, map_instance) -> None:
+        if not self.true_way:
+            return
         if self.current_hub is not map_instance.finish:
             self.change_current_hub(hubs, visu, self.true_way[0])
         else:
             print("on the end point")
 
-    def find_way(self, current: hub) -> None:
-        print(f"on part de {current.name}")
-        ways: list[list[hub]] = []
-        start_list: list[hub] = [current]
-        find: bool = False
-        ways.append(start_list)
-        true_way: list[hub] = []
+    def dijsktra(self, map_instance) -> list[str]:
+        distance = {hub.name: float("inf") for hub in map_instance.hubs}
+        name_to_hub = {hub.name: hub for hub in map_instance.hubs}
+        output = {}
+        distance[map_instance.start.name] = 0
+        priority_queue = [[0, map_instance.start.name]]  # (dist, vertex)
 
-        while not find:
-            possibilities: list[hub] = []
+        # -------- 3. Main loop --------
+        while priority_queue:
+            curr_dist, current_hub = heapq.heappop(priority_queue)
 
-            for way in ways:
-                if way[-1].state == 2:
-                    find = True
-                    true_way = way
-                    break
+            # Skip stale entries
+            if curr_dist != distance[current_hub]:
+                continue
 
-                for h in way[-1].neighbor:
-                    if h.zone_type == "blocked":
-                        continue
-                    elif h.is_full():
-                        continue
-                    elif h == self.last_hub:
-                        continue
-                    elif h.state == 2:
-                        possibilities.clear()
-                        possibilities.append(h)
-                        break
-                    possibilities.append(h)
+            # Explore neighbours
+            for point in name_to_hub[current_hub].neighbor:
+                dist_trav = curr_dist + point.cost
+                if dist_trav < distance[point.name]:
+                    distance[point.name] = dist_trav
+                    heapq.heappush(priority_queue, [dist_trav, point.name])
+                    output[point.name] = current_hub
 
-                if not possibilities:
-                    print("no ways")
-                    return
+        return self.path_flip(output, map_instance)
 
-                for p in possibilities:
-                    new_list: list[hub] = way.copy()
-                    new_list.append(p)
-                    ways.append(new_list)
+    def path_flip(self, path_rev, map_instance) -> list[str]:
+        start_name = map_instance.finish.name
+        path = [start_name]
 
-        self.true_way = true_way[1:]
-        print([name.name for name in self.true_way])
+        while map_instance.start.name != path_rev[start_name]:
+            start_name = path_rev.get(start_name)
+            path.append(start_name)
+
+        print(path[::-1])
+        return path[::-1]
