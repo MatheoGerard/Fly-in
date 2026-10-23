@@ -86,26 +86,26 @@ class Drone:
         finish = map_instance.finish.name
 
         def is_free(name: str, turn: int) -> bool:
-            if name in (start, finish):  # capacité illimitée
+            if name in (start, finish):
                 return True
             return occupancy[(turn, name)] < name_to_hub[name].max_drone
 
         came_from = {(0, start): None}
-        score = {(0, start): 0}  # nb de hubs priority traversés
-        queue = [(0, 0, start)]  # (tour, -score, hub)
+        score = {(0, start): 0}
+        queue = [(0, 0, start)]
         end = None
 
         while queue:
             turn, neg_score, name = heapq.heappop(queue)
             if -neg_score != score[(turn, name)]:
-                continue  # entrée périmée, un meilleur score existe
+                continue
             if name == finish:
                 end = (turn, name)
                 break
             if turn >= max_turn:
                 continue
 
-            options = [(1, name)]  # attendre
+            options = [(1, name)]
             options += [
                 (max(1, int(n.cost)), n.name)
                 for n in name_to_hub[name].neighbor
@@ -116,7 +116,7 @@ class Drone:
                 new_turn = turn + duration
                 if not is_free(nxt, new_turn):
                     continue
-                # pendant un trajet long, on reste "sur" le hub d'origine
+
                 if any(
                     not is_free(name, t) for t in range(turn + 1, new_turn)
                 ):
@@ -138,7 +138,6 @@ class Drone:
             self.true_way = []
             return
 
-        # reconstruction des noeuds (tour, hub)
         nodes = []
         node = end
         while node is not None:
@@ -146,13 +145,11 @@ class Drone:
             node = came_from[node]
         nodes.reverse()
 
-        # timeline[i] = hub où se trouve le drone après le tour i+1
         timeline = []
         for (t0, a), (t1, b) in zip(nodes, nodes[1:]):
             timeline.extend([a] * (t1 - t0 - 1))
             timeline.append(b)
 
-        # réservation des hubs pour les drones suivants
         for i, name in enumerate(timeline):
             if name not in (start, finish):
                 occupancy[(i + 1, name)] += 1
