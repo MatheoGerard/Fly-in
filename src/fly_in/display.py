@@ -124,7 +124,11 @@ class Visualization:
 
     def draw_hub_name(self, point: hub_obj, pos: list[int]) -> None:
         hub_txt = pg.font.SysFont("Comic Sans MS", 75)
-        txt_surface = hub_txt.render(point.name, False, "white")
+        txt_surface = hub_txt.render(
+            f"{point.name}\n{point.current_nb_drone}/{point.max_drone}",
+            False,
+            "white",
+        )
 
         self.screen.blit(
             txt_surface,
@@ -148,7 +152,7 @@ class Visualization:
                     co.b.get_true_x(sub_value_x, offset_x),
                     co.b.get_true_y(sub_value_y, offset_y),
                 ),
-                10,
+                5,
             )
 
     @staticmethod
