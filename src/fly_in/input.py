@@ -67,12 +67,9 @@ def read_input(
                         map_selector.change_selection(1, dif_select_manager)
                     elif game_manager.is_in_map:
                         if map_instance:
+                            map_instance.turn += 1
                             for d in map_instance.drones:
-                                d.move(
-                                    map_instance.hubs,
-                                    visu,
-                                    map_instance,
-                                )
+                                d.move(map_instance.hubs, visu, map_instance)
                 case pg.K_RETURN:
                     if game_manager.is_main_menu:
                         if main_menu_manager.selection_state == 1:

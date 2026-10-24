@@ -97,12 +97,22 @@ class Visualization:
         ]
 
     def draw_drones(self, drones: list[Drone]) -> None:
+        seen: dict[tuple[int, int], int] = {}
         for d in drones:
+            key = (d.current_position[0], d.current_position[1])
+            rank = seen.get(key, 0)
+            seen[key] = rank + 1
+            dx = (rank % 5) * 14 - 28
+            dy = (rank // 5) * 14 - 28
             self.screen.blit(
                 d.texture,
                 (
-                    d.current_position[0] - int(d.texture.get_width() / 2),
-                    d.current_position[1] - int(d.texture.get_height() / 2),
+                    d.current_position[0]
+                    - int(d.texture.get_width() / 2)
+                    + dx,
+                    d.current_position[1]
+                    - int(d.texture.get_height() / 2)
+                    + dy,
                 ),
             )
 
@@ -122,13 +132,15 @@ class Visualization:
                 25,
             )
 
+    def draw_turn(self, turn: int, total: int) -> None:
+        turn_txt = pg.font.SysFont("Comic Sans MS", 50)
+        turn_surface = turn_txt.render(f"{turn}/{total}", False, "white")
+
+        self.screen.blit(turn_surface, (0, 0))
+
     def draw_hub_name(self, point: hub_obj, pos: list[int]) -> None:
         hub_txt = pg.font.SysFont("Comic Sans MS", 75)
-        txt_surface = hub_txt.render(
-            f"{point.name}\n{point.current_nb_drone}/{point.max_drone}",
-            False,
-            "white",
-        )
+        txt_surface = hub_txt.render(point.name, False, "white")
 
         self.screen.blit(
             txt_surface,

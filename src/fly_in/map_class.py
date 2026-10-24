@@ -16,6 +16,7 @@ class Map:
         self.end_ok: bool = self.validate_end()
         self.drones: list[Drone] = self.create_drone()
         self.link_hubs()
+        self.turn = 0
 
     def link_hubs(self) -> None:
         for co in self.connexions:

@@ -59,6 +59,9 @@ class Parser(BaseModel):
         optionnal = self.parse_meta(meta.strip("[]"))
 
         for line in content.splitlines():
+            meta = ""
+            optionnal = self.parse_meta("")
+
             if line.strip().startswith("#"):
                 continue
 

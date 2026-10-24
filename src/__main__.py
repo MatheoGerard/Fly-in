@@ -1,5 +1,5 @@
 import pygame as pg
-from fly_in import Visualization as vizu, drone
+from fly_in import Visualization as vizu
 from fly_in import (
     Parser,
     Map,
@@ -12,26 +12,6 @@ from fly_in import (
 )
 from fly_in.connexion import Connexion
 from collections import defaultdict
-
-
-def print_simulation(drones, start_name: str) -> None:
-    """
-    Affiche les déplacements de tous les drones, un tour par ligne.
-    """
-    nb_turns = max((len(d.true_way) for d in drones), default=0)
-
-    for turn in range(nb_turns):
-        moves = []
-        for d in drones:
-            if turn >= len(d.true_way):
-                continue
-            previous = d.true_way[turn - 1] if turn > 0 else start_name
-            current = d.true_way[turn]
-            if current != previous:  # le drone a bougé
-                moves.append(f"D{d.index}-{current}")
-        print(" ".join(moves))
-
-    print(f"Total : {nb_turns} tours")
 
 
 def load_maps() -> list[list[str]]:
@@ -57,6 +37,26 @@ def load_maps() -> list[list[str]]:
     return [easy, medium, hard, chalenger]
 
 
+def print_simulation(drones, start_name: str) -> None:
+    """
+    Affiche les déplacements de tous les drones, un tour par ligne.
+    """
+    nb_turns = max((len(d.true_way) for d in drones), default=0)
+
+    for turn in range(nb_turns):
+        moves = []
+        for d in drones:
+            if turn >= len(d.true_way):
+                continue
+            previous = d.true_way[turn - 1] if turn > 0 else start_name
+            current = d.true_way[turn]
+            if current != previous:
+                moves.append(f"D{d.index}-{current}")
+        print(" ".join(moves), flush=True)
+
+    print(f"Total : {nb_turns} tours", flush=True)
+
+
 if __name__ == "__main__":
     maps_path: list[list[str]] = load_maps()
 
@@ -79,8 +79,6 @@ if __name__ == "__main__":
     content: str = ""
     connexions: list[Connexion] = []
     hubs = []
-
-    occupancy = []
 
     while game_manager.game_running:
         if game_manager.is_main_menu:
@@ -113,25 +111,29 @@ if __name__ == "__main__":
                 print(f"finish: {map_instance.finish.name}", flush=True)
 
                 occupancy = defaultdict(int)
-
+                map_instance.start.current_nb_drone = nb_drone
                 for d in map_instance.drones:
                     d.define_start_position(hubs, vizualizer)
-                    d.current_position = d.start_position
+                    d.current_position = d.start_position.copy()
                     d.dijsktra(map_instance, occupancy)
-
-                print_simulation(map_instance.drones, map_instance.start.name)
 
                 if not map_instance.start_ok:
                     raise ValueError("multiple start!")
                 if not map_instance.end_ok:
                     raise ValueError("multiple end!")
 
+                print_simulation(map_instance.drones, map_instance.start.name)
                 is_parsed = True
 
             vizualizer.draw_background()
             vizualizer.draw_connexions(connexions, hubs)
             vizualizer.draw_hub(hubs)
             vizualizer.draw_drones(map_instance.drones)
+            drones_list = map_instance.drones
+            vizualizer.draw_turn(
+                map_instance.turn,
+                max((len(d.true_way) for d in drones_list), default=0),
+            )
             mouse_hover(vizualizer, hubs)
 
         read_input(
