@@ -142,7 +142,7 @@ if __name__ == "__main__":
                     map_instance.turn += 1
                     for d in map_instance.drones:
                         d.move(map_instance.hubs, vizualizer, map_instance)
-                sleep(1)
+                sleep(0.5)
 
         read_input(
             game_manager,
