@@ -1,3 +1,4 @@
+from time import sleep
 import pygame as pg
 from fly_in import Visualization as vizu
 from fly_in import (
@@ -9,6 +10,7 @@ from fly_in import (
     SelectionDif,
     SelectionMap,
     mouse_hover,
+    play_simulation,
 )
 from fly_in.connexion import Connexion
 from collections import defaultdict
@@ -135,6 +137,12 @@ if __name__ == "__main__":
                 max((len(d.true_way) for d in drones_list), default=0),
             )
             mouse_hover(vizualizer, hubs)
+            if game_manager.is_play_mode:
+                if game_manager.is_play_mode:
+                    map_instance.turn += 1
+                    for d in map_instance.drones:
+                        d.move(map_instance.hubs, vizualizer, map_instance)
+                sleep(1)
 
         read_input(
             game_manager,

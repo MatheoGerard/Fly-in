@@ -4,6 +4,7 @@ from .map_class import Map
 from .input import read_input, mouse_hover
 from .game_state import GameState
 from .main_menu import MainMenu, SelectionDif, SelectionMap
+from .play_mode import play_simulation
 
 __all__ = [
     "Visualization",
@@ -15,4 +16,5 @@ __all__ = [
     "SelectionDif",
     "SelectionMap",
     "mouse_hover",
+    "play_simulation",
 ]

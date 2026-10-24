@@ -6,6 +6,13 @@ class GameState:
         self.is_difficulty_select = False
         self.is_map_selection = False
         self.is_in_map = False
+        self.is_play_mode = False
+
+    def set_play_mode(self) -> None:
+        if self.is_play_mode:
+            self.is_play_mode = False
+        else:
+            self.is_play_mode = True
 
     def set_paused(self) -> None:
         if self.is_paused:

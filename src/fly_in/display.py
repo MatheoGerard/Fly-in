@@ -133,6 +133,8 @@ class Visualization:
             )
 
     def draw_turn(self, turn: int, total: int) -> None:
+        if turn > total:
+            turn = total
         turn_txt = pg.font.SysFont("Comic Sans MS", 50)
         turn_surface = turn_txt.render(f"{turn}/{total}", False, "white")
 

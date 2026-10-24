@@ -47,6 +47,9 @@ def read_input(
     for event in events:
         if event.type == pg.KEYDOWN:
             match event.key:
+                case pg.K_p:
+                    if game_manager.is_in_map:
+                        game_manager.set_play_mode()
                 case pg.K_DOWN:
                     if game_manager.is_main_menu:
                         main_menu_manager.change_selection(1)
@@ -54,7 +57,10 @@ def read_input(
                         dif_select_manager.change_selection(-1)
                     elif game_manager.is_map_selection:
                         map_selector.change_selection(-1, dif_select_manager)
-                    elif game_manager.is_in_map:
+                    elif (
+                        game_manager.is_in_map
+                        and not game_manager.is_play_mode
+                    ):
                         if map_instance:
                             for d in map_instance.drones:
                                 d.move(map_instance.hubs, visu, map_instance)
@@ -65,7 +71,10 @@ def read_input(
                         dif_select_manager.change_selection(1)
                     elif game_manager.is_map_selection:
                         map_selector.change_selection(1, dif_select_manager)
-                    elif game_manager.is_in_map:
+                    elif (
+                        game_manager.is_in_map
+                        and not game_manager.is_play_mode
+                    ):
                         if map_instance:
                             map_instance.turn += 1
                             for d in map_instance.drones:
