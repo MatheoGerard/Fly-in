@@ -61,76 +61,76 @@ def print_simulation(drones, start_name: str) -> None:
 
 
 if __name__ == "__main__":
-    # try:
-    maps_path: list[list[str]] = load_maps()
+    try:
+        maps_path: list[list[str]] = load_maps()
 
-    pg.init()
-    pg.font.init()
+        pg.init()
+        pg.font.init()
 
-    is_parsed: bool = False
+        is_parsed: bool = False
 
-    game_manager = GameState()
-    main_menu_manager: MainMenu = MainMenu(
-        "textures/backrgound/PO_main_background.bmp", game_manager, 2
-    )
-    main_menu_manager.create_button()
-    difficulty_select = SelectionDif()
-    map_select = SelectionMap()
-    vizualizer = vizu()
-    vizualizer.create_window()
-    map_instance: Map | None = None
-
-    content: str = ""
-    connexions: list[Connexion] = []
-    hubs = []
-
-    while game_manager.game_running:
-        if game_manager.is_main_menu:
-            vizualizer.draw_main_menu(main_menu_manager, True)
-            is_parsed = False
-        elif game_manager.is_difficulty_select:
-            vizualizer.draw_select_dif(difficulty_select, True)
-            is_parsed = False
-        elif game_manager.is_map_selection:
-            vizualizer.draw_select_map(difficulty_select, map_select)
-            is_parsed = False
-        elif game_manager.is_in_map:
-            if not is_parsed:
-                nb_drone, hubs, connexions, map_instance = simu_init(
-                    maps_path[difficulty_select.selection_state][
-                        map_select.selection_state
-                    ]
-                )
-
-                if not map_instance.start_ok:
-                    raise ValueError("multiple start!")
-                if not map_instance.end_ok:
-                    raise ValueError("multiple end!")
-
-                occupancy = defaultdict(int)
-
-                map_instance.start.current_nb_drone = nb_drone
-                for d in map_instance.drones:
-                    d.define_start_position(hubs, vizualizer)
-                    d.current_position = d.start_position.copy()
-                    d.dijsktra(map_instance, occupancy)
-
-                print_simulation(map_instance.drones, map_instance.start.name)
-                is_parsed = True
-
-            vizualizer.draw_loop(map_instance)
-            mouse_hover(vizualizer, hubs)
-
-            play_simulation(game_manager, map_instance, vizualizer)
-
-        read_input(
-            game_manager,
-            main_menu_manager,
-            difficulty_select,
-            map_select,
-            map_instance,
-            vizualizer,
+        game_manager = GameState()
+        main_menu_manager: MainMenu = MainMenu(
+            "textures/backrgound/PO_main_background.bmp", game_manager, 2
         )
-        vizualizer.update()
-# except Exception as e:
-#     print(e)
+        main_menu_manager.create_button()
+        difficulty_select = SelectionDif()
+        map_select = SelectionMap()
+        vizualizer = vizu()
+        vizualizer.create_window()
+        map_instance: Map | None = None
+
+        content: str = ""
+        connexions: list[Connexion] = []
+        hubs = []
+
+        while game_manager.game_running:
+            if game_manager.is_main_menu:
+                vizualizer.draw_main_menu(main_menu_manager, True)
+                is_parsed = False
+            elif game_manager.is_difficulty_select:
+                vizualizer.draw_select_dif(difficulty_select, True)
+                is_parsed = False
+            elif game_manager.is_map_selection:
+                vizualizer.draw_select_map(difficulty_select, map_select)
+                is_parsed = False
+            elif game_manager.is_in_map:
+                if not is_parsed:
+                    nb_drone, hubs, connexions, map_instance = simu_init(
+                        maps_path[difficulty_select.selection_state][
+                            map_select.selection_state
+                        ]
+                    )
+
+                    if not map_instance.start_ok:
+                        raise ValueError("multiple start!")
+                    if not map_instance.end_ok:
+                        raise ValueError("multiple end!")
+
+                    occupancy = defaultdict(int)
+
+                    map_instance.start.current_nb_drone = nb_drone
+                    for d in map_instance.drones:
+                        d.define_start_position(hubs, vizualizer)
+                        d.current_position = d.start_position.copy()
+                        d.dijsktra(map_instance, occupancy)
+
+                    print_simulation(map_instance.drones, map_instance.start.name)
+                    is_parsed = True
+
+                vizualizer.draw_loop(map_instance)
+                mouse_hover(vizualizer, hubs)
+
+                play_simulation(game_manager, map_instance, vizualizer)
+
+            read_input(
+                game_manager,
+                main_menu_manager,
+                difficulty_select,
+                map_select,
+                map_instance,
+                vizualizer,
+            )
+            vizualizer.update()
+    except Exception as e:
+        print(e)
