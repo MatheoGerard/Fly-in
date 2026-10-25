@@ -1,5 +1,5 @@
 import parse
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidatorFunctionWrapHandler
 from .hub import hub
 from .connexion import Connexion
 
@@ -159,6 +159,10 @@ class Parser(BaseModel):
                         for hub in hubs:
                             if point == hub.name:
                                 hubs_to_connected.append(hub)
+                    if len(hubs_to_connected) != 2:
+                        raise ValueError(
+                            f"Impossible to create a connexion between {hubs_to_connected[0].name} and a not found hub"
+                        )
                     new_connexion = Connexion(
                         a=hubs_to_connected[0],
                         b=hubs_to_connected[1],

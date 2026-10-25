@@ -53,5 +53,9 @@ class hub(BaseModel):
             raise ValueError("'-' is not allowed in hub name!")
         if self.max_drone < 0:
             raise ValueError("Max drone must be a positive int!")
+        try:
+            Color(self.color)
+        except ValueError:
+            raise ValueError(f"{self.color} is not a valid color!")
 
         return self

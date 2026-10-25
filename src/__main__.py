@@ -1,3 +1,7 @@
+import os
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+
 import pygame as pg
 from fly_in import Visualization as vizu
 from fly_in import (
@@ -57,6 +61,7 @@ def print_simulation(drones, start_name: str) -> None:
 
 
 if __name__ == "__main__":
+    # try:
     maps_path: list[list[str]] = load_maps()
 
     pg.init()
@@ -97,6 +102,11 @@ if __name__ == "__main__":
                     ]
                 )
 
+                if not map_instance.start_ok:
+                    raise ValueError("multiple start!")
+                if not map_instance.end_ok:
+                    raise ValueError("multiple end!")
+
                 occupancy = defaultdict(int)
 
                 map_instance.start.current_nb_drone = nb_drone
@@ -104,11 +114,6 @@ if __name__ == "__main__":
                     d.define_start_position(hubs, vizualizer)
                     d.current_position = d.start_position.copy()
                     d.dijsktra(map_instance, occupancy)
-
-                if not map_instance.start_ok:
-                    raise ValueError("multiple start!")
-                if not map_instance.end_ok:
-                    raise ValueError("multiple end!")
 
                 print_simulation(map_instance.drones, map_instance.start.name)
                 is_parsed = True
@@ -127,3 +132,5 @@ if __name__ == "__main__":
             vizualizer,
         )
         vizualizer.update()
+# except Exception as e:
+#     print(e)
