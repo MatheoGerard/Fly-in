@@ -1,4 +1,6 @@
 import pygame as pg
+
+from fly_in.game_state import GameState
 from .drone import Drone
 from .hub import hub as hub_obj
 from .main_menu import MainMenu, SelectionDif, SelectionMap
@@ -141,8 +143,12 @@ class Visualization:
         self.screen.blit(turn_surface, (0, 0))
 
     def draw_hub_name(self, point: hub_obj, pos: list[int]) -> None:
-        hub_txt = pg.font.SysFont("Comic Sans MS", 75)
-        txt_surface = hub_txt.render(point.name, False, "white")
+        hub_txt = pg.font.SysFont("Comic Sans MS", 50)
+        txt_surface = hub_txt.render(
+            f"{point.name} {point.current_nb_drone}/{point.max_drone}",
+            False,
+            "white",
+        )
 
         self.screen.blit(
             txt_surface,
@@ -168,6 +174,16 @@ class Visualization:
                 ),
                 5,
             )
+
+    def draw_loop(self, map_instance) -> None:
+        self.draw_background()
+        self.draw_connexions(map_instance.connexions, map_instance.hubs)
+        self.draw_hub(map_instance.hubs)
+        self.draw_drones(map_instance.drones)
+        self.draw_turn(
+            map_instance.turn,
+            max((len(d.true_way) for d in map_instance.drones), default=0),
+        )
 
     @staticmethod
     def update():

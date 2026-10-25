@@ -1,8 +1,6 @@
-from time import sleep
 import pygame as pg
 from fly_in import Visualization as vizu
 from fly_in import (
-    Parser,
     Map,
     read_input,
     GameState,
@@ -14,6 +12,8 @@ from fly_in import (
 )
 from fly_in.connexion import Connexion
 from collections import defaultdict
+
+from fly_in.simulation_init import simu_init
 
 
 def load_maps() -> list[list[str]]:
@@ -40,9 +40,6 @@ def load_maps() -> list[list[str]]:
 
 
 def print_simulation(drones, start_name: str) -> None:
-    """
-    Affiche les déplacements de tous les drones, un tour par ligne.
-    """
     nb_turns = max((len(d.true_way) for d in drones), default=0)
 
     for turn in range(nb_turns):
@@ -94,25 +91,14 @@ if __name__ == "__main__":
             is_parsed = False
         elif game_manager.is_in_map:
             if not is_parsed:
-                pars = Parser(
-                    file_name=maps_path[difficulty_select.selection_state][
+                nb_drone, hubs, connexions, map_instance = simu_init(
+                    maps_path[difficulty_select.selection_state][
                         map_select.selection_state
                     ]
                 )
-                content = pars.read_map_file()
-                nb_drone = pars.find_nb_drones(content)
-                hubs = pars.create_hub(content)
-
-                for hub in hubs:
-                    hub.define_cost()
-
-                connexions = pars.create_connexion(content, hubs)
-
-                map_instance = Map(nb_drone, hubs, connexions)
-                map_instance.finish.max_drone = 999999999999999999999999999999
-                print(f"finish: {map_instance.finish.name}", flush=True)
 
                 occupancy = defaultdict(int)
+
                 map_instance.start.current_nb_drone = nb_drone
                 for d in map_instance.drones:
                     d.define_start_position(hubs, vizualizer)
@@ -127,22 +113,10 @@ if __name__ == "__main__":
                 print_simulation(map_instance.drones, map_instance.start.name)
                 is_parsed = True
 
-            vizualizer.draw_background()
-            vizualizer.draw_connexions(connexions, hubs)
-            vizualizer.draw_hub(hubs)
-            vizualizer.draw_drones(map_instance.drones)
-            drones_list = map_instance.drones
-            vizualizer.draw_turn(
-                map_instance.turn,
-                max((len(d.true_way) for d in drones_list), default=0),
-            )
+            vizualizer.draw_loop(map_instance)
             mouse_hover(vizualizer, hubs)
-            if game_manager.is_play_mode:
-                if game_manager.is_play_mode:
-                    map_instance.turn += 1
-                    for d in map_instance.drones:
-                        d.move(map_instance.hubs, vizualizer, map_instance)
-                sleep(0.5)
+
+            play_simulation(game_manager, map_instance, vizualizer)
 
         read_input(
             game_manager,

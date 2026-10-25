@@ -5,6 +5,7 @@ from .input import read_input, mouse_hover
 from .game_state import GameState
 from .main_menu import MainMenu, SelectionDif, SelectionMap
 from .play_mode import play_simulation
+from .simulation_init import simu_init
 
 __all__ = [
     "Visualization",
@@ -17,4 +18,5 @@ __all__ = [
     "SelectionMap",
     "mouse_hover",
     "play_simulation",
+    "simu_init",
 ]
