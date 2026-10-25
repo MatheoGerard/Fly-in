@@ -53,6 +53,13 @@ class hub(BaseModel):
             raise ValueError("'-' is not allowed in hub name!")
         if self.max_drone < 0:
             raise ValueError("Max drone must be a positive int!")
+        if (
+            self.zone_type != "blocked"
+            and self.zone_type != "restricted"
+            and self.zone_type != "normal"
+            and self.zone_type != "priority"
+        ):
+            raise ValueError(f"{self.zone_type} is not a zone type valid!")
         try:
             if self.color != "none":
                 Color(self.color)

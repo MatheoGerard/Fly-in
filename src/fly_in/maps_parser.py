@@ -31,8 +31,24 @@ class Parser(BaseModel):
         if not meta:
             return meta_parsed
 
+        for word in meta.split(" "):
+            if word.split("=")[0] not in meta_parsed.keys():
+                raise ValueError(
+                    f"{word.split('=')[0]} is not a valid meta data!"
+                )
+
         if "color=" in meta:
             meta_parsed["color"] = parse.search("color={:w}", meta).fixed[0]
+            # print(meta_parsed["zone"])
+            # if (
+            #     meta_parsed["zone"] != "blocked"
+            #     and meta_parsed["zone"] != "normal"
+            #     and meta_parsed["zone"] != "restricted"
+            #     and meta_parsed["zone"] != "priority"
+            # ):
+            #     raise ValueError(
+            #         f"{meta_parsed['color']} is not a valid zone type!"
+            #     )
         if "zone=" in meta:
             meta_parsed["zone"] = parse.search("zone={:w}", meta).fixed[0]
         if "max_drones=" in meta:
