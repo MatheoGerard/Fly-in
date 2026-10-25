@@ -19,9 +19,6 @@ class hub(BaseModel):
     visited: bool = False
 
     def define_cost(self) -> None:
-        """
-        Définit le coût du hub selon son type de zone.
-        """
         match self.zone_type:
             case "blocked":
                 self.cost = float("inf")
@@ -33,43 +30,25 @@ class hub(BaseModel):
                 self.cost = 1.0
 
     def get_color(self) -> Color | str:
-        """
-        Retourne la couleur d'affichage du hub.
-        """
         if self.color == "none" or self.color == "rainbow":
             return Color("aqua")
 
         return Color(self.color)
 
     def get_true_x(self, sub_value, offset_x) -> int:
-        """
-        Convertit la position x du hub en pixels.
-        """
         return (self.position[0] - sub_value + 1) * offset_x
 
     def get_true_y(self, sub_value, offset_y) -> int:
-        """
-        Convertit la position y du hub en pixels.
-        """
         return (self.position[1] - sub_value + 1) * offset_y
 
     def update_current_nb_drone(self, change_value: int) -> None:
-        """
-        Ajoute change_value au nombre de drones sur le hub.
-        """
         self.current_nb_drone += change_value
 
     def is_full(self) -> bool:
-        """
-        Indique si le hub a atteint sa capacité maximale.
-        """
         return self.current_nb_drone >= self.max_drone
 
     @model_validator(mode="after")
     def validate_rules(self) -> hub:
-        """
-        Vérifie que le nom et la capacité du hub sont valides.
-        """
         if "-" in self.name:
             raise ValueError("'-' is not allowed in hub name!")
         if self.max_drone < 0:
