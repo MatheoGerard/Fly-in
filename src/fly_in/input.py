@@ -1,5 +1,5 @@
+from pydantic import NonNegativeFloat
 import pygame as pg
-
 from .display import Visualization as visu
 from .hub import hub
 from .main_menu import MainMenu, SelectionDif, SelectionMap
@@ -34,6 +34,43 @@ def mouse_hover(dis: visu, hubs: list[hub]) -> None:
                 )
 
 
+def space_input() -> None:
+    pg.display.toggle_fullscreen()
+
+
+def escape_input(game_manager: GameState, map_selector: SelectionMap) -> None:
+    if game_manager.is_difficulty_select:
+        game_manager.set_difficulty_select()
+        game_manager.set_main_menu()
+    elif game_manager.is_map_selection:
+        map_selector.selection_state = 0
+        game_manager.set_map_selector()
+        game_manager.set_difficulty_select()
+    elif game_manager.is_in_map:
+        map_selector.selection_state = 0
+        game_manager.set_in_map()
+        game_manager.set_map_selector()
+
+
+def return_input(game_manager: GameState, main_menu_manager: MainMenu) -> None:
+    if game_manager.is_main_menu:
+        if main_menu_manager.selection_state == 1:
+            exit()
+        game_manager.set_main_menu()
+        game_manager.set_difficulty_select()
+    elif game_manager.is_difficulty_select:
+        game_manager.set_difficulty_select()
+        game_manager.set_map_selector()
+    elif game_manager.is_map_selection:
+        game_manager.set_map_selector()
+        game_manager.set_in_map()
+
+
+def p_input(game_manager: GameState) -> None:
+    if game_manager.is_in_map:
+        game_manager.set_play_mode()
+
+
 def read_input(
     game_manager: GameState,
     main_menu_manager: MainMenu,
@@ -48,8 +85,7 @@ def read_input(
         if event.type == pg.KEYDOWN:
             match event.key:
                 case pg.K_p:
-                    if game_manager.is_in_map:
-                        game_manager.set_play_mode()
+                    p_input(game_manager)
                 case pg.K_DOWN:
                     if game_manager.is_main_menu:
                         main_menu_manager.change_selection(1)
@@ -80,30 +116,10 @@ def read_input(
                             for d in map_instance.drones:
                                 d.move(map_instance.hubs, visu, map_instance)
                 case pg.K_RETURN:
-                    if game_manager.is_main_menu:
-                        if main_menu_manager.selection_state == 1:
-                            exit()
-                        game_manager.set_main_menu()
-                        game_manager.set_difficulty_select()
-                    elif game_manager.is_difficulty_select:
-                        game_manager.set_difficulty_select()
-                        game_manager.set_map_selector()
-                    elif game_manager.is_map_selection:
-                        game_manager.set_map_selector()
-                        game_manager.set_in_map()
+                    return_input(game_manager, main_menu_manager)
                 case pg.K_ESCAPE:
-                    if game_manager.is_difficulty_select:
-                        game_manager.set_difficulty_select()
-                        game_manager.set_main_menu()
-                    elif game_manager.is_map_selection:
-                        map_selector.selection_state = 0
-                        game_manager.set_map_selector()
-                        game_manager.set_difficulty_select()
-                    elif game_manager.is_in_map:
-                        map_selector.selection_state = 0
-                        game_manager.set_in_map()
-                        game_manager.set_map_selector()
+                    escape_input(game_manager, map_selector)
                 case pg.K_SPACE:
-                    pg.display.toggle_fullscreen()
+                    space_input()
                 case _:
                     print(event.key)
