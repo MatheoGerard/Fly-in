@@ -30,7 +30,7 @@ class Visualization:
         for but in main_menu_manager.buttons:
             if but.is_selected:
                 self.screen.blit(
-                    arrow_img, (but.position[0] - 300, but.position[1])
+                    arrow_img, (but.position[0], but.position[1] + 10)
                 )
             # pg.draw.rect(
             #     self.screen,

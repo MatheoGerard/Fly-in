@@ -54,7 +54,8 @@ class hub(BaseModel):
         if self.max_drone < 0:
             raise ValueError("Max drone must be a positive int!")
         try:
-            Color(self.color)
+            if self.color != "none":
+                Color(self.color)
         except ValueError:
             raise ValueError(f"{self.color} is not a valid color!")
 

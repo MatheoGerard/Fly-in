@@ -20,7 +20,7 @@ class MainMenu:
         self.selection_state: int = 0
         self.background = pg.image.load(background_path)
         self.buttons: list[Button] = []
-        self.first_but_position: list[int] = [1000, 600]
+        self.first_but_position: list[int] = [1075, 690]
 
     def create_button(self) -> None:
         self.buttons.append(
@@ -32,7 +32,7 @@ class MainMenu:
             ),
         )
 
-        self.first_but_position[1] += 200
+        self.first_but_position[1] += 150
 
         for _ in range(0, self.nb_options - 1):
             self.buttons.append(
@@ -43,7 +43,7 @@ class MainMenu:
                     self.first_but_position[1],
                 )
             )
-            self.first_but_position[1] += 100
+            self.first_but_position[1] += 150
 
     def change_selection(self, move: int) -> None:
         self.buttons[self.selection_state].is_selected = False
