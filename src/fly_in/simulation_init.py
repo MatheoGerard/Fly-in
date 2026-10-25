@@ -11,6 +11,10 @@ def simu_init(
 
     content: str = pars.read_map_file()
     nb_drone: int | None = pars.find_nb_drones(content)
+    if nb_drone is None:
+        raise ValueError("No nb_drone in file!")
+    if nb_drone < 1:
+        raise ValueError("not enough drone!")
     hubs: list[Hub] = pars.create_hub(content)
     connexions: list[Connexion] = pars.create_connexion(content, hubs)
 

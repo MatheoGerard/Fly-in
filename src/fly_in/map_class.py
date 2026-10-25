@@ -36,6 +36,10 @@ class Map:
 
         return drones
 
+    # def validate_nb_drone(self) -> None:
+    #     if self.nb_drone < 1:
+    #         raise ValueError("Not enough drone to begin!")
+
     def validate_start(self) -> bool:
         start_nb: int = 0
 

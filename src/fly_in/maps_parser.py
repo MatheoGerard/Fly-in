@@ -113,6 +113,10 @@ class Parser(BaseModel):
                 else:
                     base = line
                 mandatory = parse.parse("hub: {:w} {:d} {:d}", base.strip())
+                if mandatory is None:
+                    raise ValueError(
+                        "hub line  must be at least 'hub: <name> <x> <y>'"
+                    )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
 
@@ -159,6 +163,9 @@ class Parser(BaseModel):
                         for hub in hubs:
                             if point == hub.name:
                                 hubs_to_connected.append(hub)
+                    if len(hubs_to_connected) > 2:
+                        raise ValueError("Multiple hubs have the same name!")
+
                     if len(hubs_to_connected) != 2:
                         raise ValueError(
                             f"Impossible to create a connexion between {hubs_to_connected[0].name} and a not found hub"
