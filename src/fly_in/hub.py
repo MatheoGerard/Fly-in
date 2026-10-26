@@ -61,7 +61,7 @@ class hub(BaseModel):
         ):
             raise ValueError(f"{self.zone_type} is not a zone type valid!")
         try:
-            if self.color != "none":
+            if self.color != "none" and self.color != "rainbow":
                 Color(self.color)
         except ValueError:
             raise ValueError(f"{self.color} is not a valid color!")

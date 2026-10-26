@@ -131,7 +131,7 @@ class Parser(BaseModel):
                 mandatory = parse.parse("hub: {:w} {:d} {:d}", base.strip())
                 if mandatory is None:
                     raise ValueError(
-                        "hub line  must be at least 'hub: <name> <x> <y>'"
+                        "hub line  must be at least 'hub: <name> <x> <y> ([meta_data...])'"
                     )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
@@ -166,6 +166,13 @@ class Parser(BaseModel):
                     base = line
 
                 if meta_link:
+                    if (
+                        meta_link.strip("[]").split("=")[0]
+                        != "max_link_capacity"
+                    ):
+                        raise ValueError(
+                            "max_link_capacity must be define with 'max_link_capacity=...'"
+                        )
                     link_capacity = parse.search(
                         "max_link_capacity={:d}", meta_link.strip("[]")
                     ).fixed[0]
@@ -184,7 +191,7 @@ class Parser(BaseModel):
 
                     if len(hubs_to_connected) != 2:
                         raise ValueError(
-                            f"Impossible to create a connexion between {hubs_to_connected[0].name} and a not found hub"
+                            "Impossible to create a connexion between hubs not exist"
                         )
                     new_connexion = Connexion(
                         a=hubs_to_connected[0],

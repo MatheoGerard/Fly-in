@@ -19,6 +19,7 @@ install:
 	uv sync
 
 run:
+	@clear
 	@lines=$$(wc -l < banner.txt); \
 	printf '\033[?25l'; \
 	for f in $$(seq 1 $(FRAMES)); do \
