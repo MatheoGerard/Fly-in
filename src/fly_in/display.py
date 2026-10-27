@@ -26,23 +26,24 @@ class Visualization:
 
         if current_dif == 0:
             if current_map == 0:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_meadow.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_meadow.bmp")
                 self.screen.blit(map_texture, (0, 0))
             elif current_map == 1:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_forest.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_forest.bmp")
                 self.screen.blit(map_texture, (0, 0))
             else:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_castle.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_castle.bmp")
                 self.screen.blit(map_texture, (0, 0))
-        elif current_dif == 1 and current_map == 0:
-            map_texture = pg.image.load("textures/maps_textures/map_lava.bmp")
-            self.screen.blit(map_texture, (0, 0))
+        elif current_dif == 1:
+            if current_map == 0:
+                map_texture = pg.image.load("textures/maps_textures/map_lava.bmp")
+                self.screen.blit(map_texture, (0, 0))
+            elif current_map == 1:
+                map_texture = pg.image.load("textures/maps_textures/map_volcano.bmp")
+                self.screen.blit(map_texture, (0, 0))
+            else:
+                map_texture = pg.image.load("textures/maps_textures/map_prison.bmp")
+                self.screen.blit(map_texture, (0, 0))
         else:
             self.screen.fill("black")
 
@@ -51,9 +52,7 @@ class Visualization:
 
         for but in main_menu_manager.buttons:
             if but.is_selected:
-                self.screen.blit(
-                    arrow_img, (but.position[0], but.position[1] + 10)
-                )
+                self.screen.blit(arrow_img, (but.position[0], but.position[1] + 10))
             # pg.draw.rect(
             #     self.screen,
             #     "black",
@@ -72,21 +71,15 @@ class Visualization:
             #     ],
             # )
 
-    def draw_main_menu(
-        self, main_menu_manager: MainMenu, launch: bool = False
-    ) -> None:
+    def draw_main_menu(self, main_menu_manager: MainMenu, launch: bool = False) -> None:
         if launch:
             self.screen.blit(main_menu_manager.background, (0, 0))
             self.draw_menu_button(main_menu_manager)
 
-    def draw_select_dif(
-        self, select_dif_manager: SelectionDif, launch: bool
-    ) -> None:
+    def draw_select_dif(self, select_dif_manager: SelectionDif, launch: bool) -> None:
         if launch:
             self.screen.blit(
-                select_dif_manager.backgrounds[
-                    select_dif_manager.selection_state
-                ],
+                select_dif_manager.backgrounds[select_dif_manager.selection_state],
                 (0, 0),
             )
 
@@ -131,12 +124,8 @@ class Visualization:
             self.screen.blit(
                 d.texture,
                 (
-                    d.current_position[0]
-                    - int(d.texture.get_width() / 2)
-                    + dx,
-                    d.current_position[1]
-                    - int(d.texture.get_height() / 2)
-                    + dy,
+                    d.current_position[0] - int(d.texture.get_width() / 2) + dx,
+                    d.current_position[1] - int(d.texture.get_height() / 2) + dy,
                 ),
             )
 
@@ -197,9 +186,7 @@ class Visualization:
                 5,
             )
 
-    def draw_loop(
-        self, map_instance, current_dif: int, current_map: int
-    ) -> None:
+    def draw_loop(self, map_instance, current_dif: int, current_map: int) -> None:
         self.draw_background(current_dif, current_map)
         self.draw_connexions(map_instance.connexions, map_instance.hubs)
         self.draw_hub(map_instance.hubs)

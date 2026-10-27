@@ -56,9 +56,9 @@ def print_simulation(drones, start_name: str) -> None:
             current = d.true_way[turn]
             if current != previous:
                 moves.append(f"D{d.index}-{current}")
-        print(" ".join(moves), flush=True)
+        print(" ".join(moves), flush=True, file=open("text.txt", "a"))
 
-    print(f"Total : {nb_turns} tours", flush=True)
+    print(f"Total : {nb_turns} tours", flush=True, file=open("text.txt", "a"))
 
 
 if __name__ == "__main__":
@@ -116,9 +116,7 @@ if __name__ == "__main__":
                         d.current_position = d.start_position.copy()
                         d.dijsktra(map_instance, occupancy)
 
-                    print_simulation(
-                        map_instance.drones, map_instance.start.name
-                    )
+                    print_simulation(map_instance.drones, map_instance.start.name)
                     is_parsed = True
 
                 vizualizer.draw_loop(
