@@ -21,8 +21,30 @@ class Visualization:
 
         return screen
 
-    def draw_background(self) -> None:
-        self.screen.fill("black")
+    def draw_background(self, current_dif: int, current_map: int) -> None:
+        map_texture: pg.surface.Surface
+
+        if current_dif == 0:
+            if current_map == 0:
+                map_texture = pg.image.load(
+                    "textures/maps_textures/map_meadow.bmp"
+                )
+                self.screen.blit(map_texture, (0, 0))
+            elif current_map == 1:
+                map_texture = pg.image.load(
+                    "textures/maps_textures/map_forest.bmp"
+                )
+                self.screen.blit(map_texture, (0, 0))
+            else:
+                map_texture = pg.image.load(
+                    "textures/maps_textures/map_castle.bmp"
+                )
+                self.screen.blit(map_texture, (0, 0))
+        elif current_dif == 1 and current_map == 0:
+            map_texture = pg.image.load("textures/maps_textures/map_lava.bmp")
+            self.screen.blit(map_texture, (0, 0))
+        else:
+            self.screen.fill("black")
 
     def draw_menu_button(self, main_menu_manager: MainMenu) -> None:
         arrow_img = pg.image.load("textures/button_test/arrow.bmp")
@@ -175,8 +197,10 @@ class Visualization:
                 5,
             )
 
-    def draw_loop(self, map_instance) -> None:
-        self.draw_background()
+    def draw_loop(
+        self, map_instance, current_dif: int, current_map: int
+    ) -> None:
+        self.draw_background(current_dif, current_map)
         self.draw_connexions(map_instance.connexions, map_instance.hubs)
         self.draw_hub(map_instance.hubs)
         self.draw_drones(map_instance.drones)

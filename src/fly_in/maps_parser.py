@@ -53,7 +53,7 @@ class Parser(BaseModel):
             meta_parsed["zone"] = parse.search("zone={:w}", meta).fixed[0]
         if "max_drones=" in meta:
             meta_parsed["max_drones"] = parse.search(
-                "max_drones={:w}", meta
+                "max_drones={:d}", meta
             ).fixed[0]
 
         return meta_parsed

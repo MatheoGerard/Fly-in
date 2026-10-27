@@ -16,6 +16,7 @@ from fly_in import (
 )
 from fly_in.connexion import Connexion
 from collections import defaultdict
+from pydantic import ValidationError
 
 from fly_in.simulation_init import simu_init
 
@@ -115,10 +116,16 @@ if __name__ == "__main__":
                         d.current_position = d.start_position.copy()
                         d.dijsktra(map_instance, occupancy)
 
-                    print_simulation(map_instance.drones, map_instance.start.name)
+                    print_simulation(
+                        map_instance.drones, map_instance.start.name
+                    )
                     is_parsed = True
 
-                vizualizer.draw_loop(map_instance)
+                vizualizer.draw_loop(
+                    map_instance,
+                    difficulty_select.selection_state,
+                    map_select.selection_state,
+                )
                 mouse_hover(vizualizer, hubs)
 
                 play_simulation(game_manager, map_instance, vizualizer)
@@ -132,5 +139,9 @@ if __name__ == "__main__":
                 vizualizer,
             )
             vizualizer.update()
+    except ValidationError as e:
+        print(e.errors()[0]["msg"])
+    except ValueError as e:
+        print(e)
     except Exception as e:
         print(e)
