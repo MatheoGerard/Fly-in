@@ -1,8 +1,5 @@
-import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
-
 import pygame as pg
+from typing import Any
 from fly_in import Visualization as vizu
 from fly_in import (
     Map,
@@ -13,12 +10,14 @@ from fly_in import (
     SelectionMap,
     mouse_hover,
     play_simulation,
+    simu_init,
+    Drone,
+    Connexion,
 )
-from fly_in.connexion import Connexion
 from collections import defaultdict
 from pydantic import ValidationError
 
-from fly_in.simulation_init import simu_init
+from fly_in.hub import Hub
 
 
 def load_maps() -> list[list[str]]:
@@ -44,7 +43,7 @@ def load_maps() -> list[list[str]]:
     return [easy, medium, hard, chalenger]
 
 
-def print_simulation(drones, start_name: str) -> None:
+def print_simulation(drones: list[Drone], start_name: str) -> None:
     nb_turns = max((len(d.true_way) for d in drones), default=0)
 
     for turn in range(nb_turns):
@@ -83,7 +82,7 @@ if __name__ == "__main__":
 
         content: str = ""
         connexions: list[Connexion] = []
-        hubs = []
+        hubs: list[Hub] = []
 
         while game_manager.game_running:
             if game_manager.is_main_menu:
@@ -103,20 +102,27 @@ if __name__ == "__main__":
                         ]
                     )
 
+                    if map_instance is None:
+                        raise ValueError("Error during map creation!")
                     if not map_instance.start_ok:
                         raise ValueError("multiple start!")
                     if not map_instance.end_ok:
                         raise ValueError("multiple end!")
 
-                    occupancy = defaultdict(int)
+                    occupancy: defaultdict[tuple[Any, ...], int] = defaultdict(
+                        int
+                    )
 
-                    map_instance.start.current_nb_drone = nb_drone
+                    if nb_drone:
+                        map_instance.start.current_nb_drone = nb_drone
                     for d in map_instance.drones:
                         d.define_start_position(hubs, vizualizer)
                         d.current_position = d.start_position.copy()
                         d.dijsktra(map_instance, occupancy)
 
-                    print_simulation(map_instance.drones, map_instance.start.name)
+                    print_simulation(
+                        map_instance.drones, map_instance.start.name
+                    )
                     is_parsed = True
 
                 vizualizer.draw_loop(

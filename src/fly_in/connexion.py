@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from .hub import hub
+from .hub import Hub
 from pydantic import model_validator, BaseModel, ValidationError
 
 
 class Connexion(BaseModel):
-    a: hub
-    b: hub
+    a: Hub
+    b: Hub
     max_link_capacity: int = 1
 
     @model_validator(mode="after")

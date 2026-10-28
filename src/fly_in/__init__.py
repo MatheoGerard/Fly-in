@@ -6,6 +6,8 @@ from .game_state import GameState
 from .main_menu import MainMenu, SelectionDif, SelectionMap
 from .play_mode import play_simulation
 from .simulation_init import simu_init
+from .connexion import Connexion
+from .drone import Drone
 
 __all__ = [
     "Visualization",
@@ -19,4 +21,6 @@ __all__ = [
     "mouse_hover",
     "play_simulation",
     "simu_init",
+    "Connexion",
+    "Drone",
 ]

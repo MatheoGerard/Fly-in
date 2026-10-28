@@ -18,7 +18,7 @@ class MainMenu:
     ) -> None:
         self.nb_options: int = options
         self.selection_state: int = 0
-        self.background = pg.image.load(background_path)
+        self.background: pg.surface.Surface = pg.image.load(background_path)
         self.buttons: list[Button] = []
         self.first_but_position: list[int] = [1075, 690]
 
@@ -56,7 +56,7 @@ class MainMenu:
 class SelectionDif:
     def __init__(self) -> None:
         self.selection_state: int = 0
-        self.backgrounds = []
+        self.backgrounds: list[pg.surface.Surface] = []
         self.load_selection_assets()
 
     def load_selection_assets(self) -> None:
@@ -81,7 +81,7 @@ class SelectionDif:
 
 class SelectionMap:
     def __init__(self) -> None:
-        self.backgrounds: dict[int, list[pg.Surface]] = {}
+        self.backgrounds: dict[int, list[pg.surface.Surface]] = {}
         self.selection_state: int = 0
         self.load_assets()
 

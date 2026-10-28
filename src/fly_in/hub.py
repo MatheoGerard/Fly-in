@@ -4,7 +4,7 @@ from pygame import Color
 from pydantic import BaseModel, model_validator
 
 
-class hub(BaseModel):
+class Hub(BaseModel):
     name: str
     position: list[int]
 
@@ -13,7 +13,7 @@ class hub(BaseModel):
     max_drone: int
     state: int
 
-    neighbor: list[hub] = []
+    neighbor: list[Hub] = []
     cost: float = 0
     current_nb_drone: int = 0
     visited: bool = False
@@ -35,10 +35,10 @@ class hub(BaseModel):
 
         return Color(self.color)
 
-    def get_true_x(self, sub_value, offset_x) -> int:
+    def get_true_x(self, sub_value: int, offset_x: int) -> int:
         return (self.position[0] - sub_value + 1) * offset_x
 
-    def get_true_y(self, sub_value, offset_y) -> int:
+    def get_true_y(self, sub_value: int, offset_y: int) -> int:
         return (self.position[1] - sub_value + 1) * offset_y
 
     def update_current_nb_drone(self, change_value: int) -> None:
@@ -48,7 +48,7 @@ class hub(BaseModel):
         return self.current_nb_drone >= self.max_drone
 
     @model_validator(mode="after")
-    def validate_rules(self) -> hub:
+    def validate_rules(self) -> Hub:
         if "-" in self.name:
             raise ValueError("'-' is not allowed in hub name!")
         if self.max_drone < 0:

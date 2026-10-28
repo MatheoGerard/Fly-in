@@ -1,17 +1,17 @@
 from .connexion import Connexion
-from .hub import hub
+from .hub import Hub
 from .drone import Drone
 
 
 class Map:
     def __init__(
-        self, nb_drone: int, hubs: list[hub], connexions: list[Connexion]
+        self, nb_drone: int, hubs: list[Hub], connexions: list[Connexion]
     ) -> None:
         self.nb_drone: int = nb_drone
-        self.hubs: list[hub] = hubs
+        self.hubs: list[Hub] = hubs
         self.connexions: list[Connexion] = connexions
-        self.start: hub = self.find_start()
-        self.finish: hub = self.find_end()
+        self.start: Hub = self.find_start()
+        self.finish: Hub = self.find_end()
         self.start_ok: bool = self.validate_start()
         self.end_ok: bool = self.validate_end()
         self.drones: list[Drone] = self.create_drone()
@@ -62,13 +62,13 @@ class Map:
             return False
         return True
 
-    def find_start(self) -> hub:
+    def find_start(self) -> Hub:
         for point in self.hubs:
             if point.state == 0:
                 return point
         raise ValueError("No start point in map!")
 
-    def find_end(self) -> hub:
+    def find_end(self) -> Hub:
         for point in self.hubs:
             if point.state == 2:
                 return point

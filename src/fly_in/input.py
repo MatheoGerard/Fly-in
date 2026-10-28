@@ -1,13 +1,12 @@
-from pydantic import NonNegativeFloat
 import pygame as pg
-from .display import Visualization as visu
-from .hub import hub
+from .display import Visualization
+from .hub import Hub
 from .main_menu import MainMenu, SelectionDif, SelectionMap
 from .game_state import GameState
 from .map_class import Map
 
 
-def mouse_hover(dis: visu, hubs: list[hub]) -> None:
+def mouse_hover(dis: Visualization, hubs: list[Hub]) -> None:
     offset_x, offset_y = dis.find_true_positions(hubs)
     sub_value_x = min(hub.position[0] for hub in hubs)
     sub_value_y = min(hub.position[1] for hub in hubs)
@@ -76,8 +75,8 @@ def read_input(
     main_menu_manager: MainMenu,
     dif_select_manager: SelectionDif,
     map_selector: SelectionMap,
-    map_instance: Map,
-    visu,
+    map_instance: Map | None,
+    visu: Visualization,
 ) -> None:
     events = pg.event.get()
 

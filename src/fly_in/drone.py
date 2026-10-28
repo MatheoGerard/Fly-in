@@ -1,27 +1,37 @@
+from __future__ import annotations
 import heapq
+from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 import pygame as pg
-from .hub import hub
+
+from .hub import Hub
+
+if TYPE_CHECKING:
+    from .display import Visualization
+    from fly_in.map_class import Map
 
 
 class Drone:
     def __init__(
         self,
-        current_hub: hub,
+        current_hub: Hub,
         index: int,
         text_path: str,
     ) -> None:
         self.step = 0
-        self.current_hub: hub = current_hub
-        self.last_hub: hub | None = None
+        self.current_hub: Hub = current_hub
+        self.last_hub: Hub | None = None
         self.start_position: list[int] = []
         self.current_position: list[int] = []
         self.is_on_end: bool = False
-        self.link: tuple[hub, hub] | None = None
+        self.link: tuple[Hub, Hub] | None = None
         self.index = index
         self.texture = self.load_texture(text_path)
         self.true_way: list[str] = []
 
-    def hub_position(self, target: hub, hubs: list[hub], visu) -> list[int]:
+    def hub_position(
+        self, target: Hub, hubs: list[Hub], visu: Visualization
+    ) -> list[int]:
         offset_x, offset_y = visu.find_true_positions(hubs)
         sub_value_x = min(h.position[0] for h in hubs)
         sub_value_y = min(h.position[1] for h in hubs)
@@ -31,13 +41,17 @@ class Drone:
             target.get_true_y(sub_value_y, offset_y),
         ]
 
-    def define_start_position(self, hubs: list[hub], visu) -> None:
+    def define_start_position(
+        self, hubs: list[Hub], visu: Visualization
+    ) -> None:
         self.start_position = self.hub_position(self.current_hub, hubs, visu)
 
     def load_texture(self, path: str) -> pg.surface.Surface:
         return pg.image.load(path)
 
-    def enter_link(self, hubs: list[hub], visu, a: hub, b: hub) -> None:
+    def enter_link(
+        self, hubs: list[Hub], visu: Visualization, a: Hub, b: Hub
+    ) -> None:
         if self.link is None:
             a.current_nb_drone -= 1
         self.link = (a, b)
@@ -48,7 +62,9 @@ class Drone:
             (pos_a[1] + pos_b[1]) // 2,
         ]
 
-    def change_current_hub(self, hubs: list[hub], visu, new_hub: hub) -> None:
+    def change_current_hub(
+        self, hubs: list[Hub], visu: Visualization, new_hub: Hub
+    ) -> None:
         self.last_hub = self.current_hub
         self.current_hub = new_hub
 
@@ -63,7 +79,9 @@ class Drone:
         if new_hub.state == 2:
             self.is_on_end = True
 
-    def move(self, hubs: list[hub], visu, map_instance) -> None:
+    def move(
+        self, hubs: list[Hub], visu: Visualization, map_instance: Map
+    ) -> None:
         if self.step >= len(self.true_way):
             return
         name_to_hub = {h.name: h for h in map_instance.hubs}
@@ -84,8 +102,8 @@ class Drone:
 
     def dijsktra(
         self,
-        map_instance,
-        occupancy: dict,
+        map_instance: Map,
+        occupancy: defaultdict[tuple[Any, ...], int],
         max_turn: int = 500,
     ) -> None:
         name_to_hub = {h.name: h for h in map_instance.hubs}
@@ -108,10 +126,12 @@ class Drone:
                 for k in range(turn + 1, turn + 2)
             )
 
-        came_from = {(0, start): None}
-        score = {(0, start): 0}
-        queue = [(0, 0, start)]
-        end = None
+        came_from: dict[tuple[int, str], tuple[int, str] | None] = {
+            (0, start): None
+        }
+        score: dict[tuple[int, str], int] = {(0, start): 0}
+        queue: list[tuple[int, int, str]] = [(0, 0, start)]
+        end: tuple[int, str] | None = None
 
         while queue:
             turn, neg_score, name = heapq.heappop(queue)
@@ -153,8 +173,8 @@ class Drone:
             self.true_way = []
             return
 
-        nodes = []
-        node = end
+        nodes: list[tuple[int, str]] = []
+        node: tuple[int, str] | None = end
         while node is not None:
             nodes.append(node)
             node = came_from[node]
@@ -165,7 +185,7 @@ class Drone:
                 for k in range(t0 + 1, t0 + 2):
                     occupancy[(k, *sorted((a, b)))] += 1
 
-        timeline = []
+        timeline: list[str] = []
         for (t0, a), (t1, b) in zip(nodes, nodes[1:]):
             on_link = f"{a}-{b}" if a != b else a
             timeline.extend([on_link] * (t1 - t0 - 1))

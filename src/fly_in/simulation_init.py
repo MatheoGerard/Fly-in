@@ -1,4 +1,4 @@
-from .hub import hub as Hub
+from .hub import Hub as Hub
 from .maps_parser import Parser
 from .connexion import Connexion
 from .map_class import Map
