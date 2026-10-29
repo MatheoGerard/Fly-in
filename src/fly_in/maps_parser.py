@@ -50,7 +50,7 @@ class Parser(BaseModel):
 
     def find_nb_drones(self, content: str) -> int | None:
         for line in content.splitlines():
-            if line.strip().startswith("#"):
+            if line.strip().startswith("#") or not line.replace(" ", ""):
                 continue
             if line.startswith("nb_drones: "):
                 return int(parse.search("nb_drones: {:d}", line).fixed[0])
