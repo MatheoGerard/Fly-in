@@ -137,8 +137,7 @@ if __name__ == "__main__":
                         d.dijsktra(map_instance, occupancy)
 
                     print_simulation(
-                        map_instance.drones,
-                        map_instance.start.name,
+                        map_instance.drones, map_instance.start.name
                     )
                     is_parsed = True
 

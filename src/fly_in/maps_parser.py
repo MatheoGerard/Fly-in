@@ -83,7 +83,7 @@ class Parser(BaseModel):
                 else:
                     base = line
                 mandatory = parse.parse(
-                    "end_hub: {:w} {:d} {:d}", base.strip()
+                    "end_hub: {:S} {:d} {:d}", base.strip()
                 )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
@@ -104,7 +104,7 @@ class Parser(BaseModel):
                 else:
                     base = line
                 mandatory = parse.parse(
-                    "start_hub: {:w} {:d} {:d}", base.strip()
+                    "start_hub: {:S} {:d} {:d}", base.strip()
                 )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
@@ -124,7 +124,7 @@ class Parser(BaseModel):
                     base, meta = line.split("[")
                 else:
                     base = line
-                mandatory = parse.parse("hub: {:w} {:d} {:d}", base.strip())
+                mandatory = parse.parse("hub: {:S} {:d} {:d}", base.strip())
                 if mandatory is None:
                     raise ValueError(
                         "hub line  must be at least 'hub: <name> <x> <y> "
@@ -175,7 +175,7 @@ class Parser(BaseModel):
                         "max_link_capacity={:d}", meta_link.strip("[]")
                     ).fixed[0]
 
-                points = parse.parse("connection: {:w}-{:w}", base.strip())
+                points = parse.parse("connection: {:S}-{:S}", base.strip())
 
                 hubs_to_connected = []
 
