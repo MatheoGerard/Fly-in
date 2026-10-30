@@ -32,7 +32,10 @@ class Drone:
         self.true_way: list[str] = []
 
     def hub_position(
-        self, target: Hub, hubs: list[Hub], visu: Visualization
+        self,
+        target: Hub,
+        hubs: list[Hub],
+        visu: Visualization,
     ) -> list[int]:
         offset_x, offset_y = visu.find_true_positions(hubs)
         sub_value_x = min(h.position[0] for h in hubs)
@@ -43,12 +46,17 @@ class Drone:
             target.get_true_y(sub_value_y, offset_y),
         ]
 
-    def define_start_position(self, hubs: list[Hub], visu: Visualization) -> None:
+    def define_start_position(
+        self, hubs: list[Hub], visu: Visualization
+    ) -> None:
         self.start_position = self.hub_position(self.current_hub, hubs, visu)
 
     def animate(self, target: tuple[int, int], dt: float) -> None:
         if not self.render_position:
-            self.render_position = [float(target[0]), float(target[1])]
+            self.render_position = [
+                float(target[0]),
+                float(target[1]),
+            ]
             return
 
         factor = 1 - math.exp(-10 * dt)
@@ -62,7 +70,13 @@ class Drone:
     def load_texture(self, path: str) -> pg.surface.Surface:
         return pg.image.load(path)
 
-    def enter_link(self, hubs: list[Hub], visu: Visualization, a: Hub, b: Hub) -> None:
+    def enter_link(
+        self,
+        hubs: list[Hub],
+        visu: Visualization,
+        a: Hub,
+        b: Hub,
+    ) -> None:
         if self.link is None:
             a.current_nb_drone -= 1
         self.link = (a, b)
@@ -74,7 +88,10 @@ class Drone:
         ]
 
     def change_current_hub(
-        self, hubs: list[Hub], visu: Visualization, new_hub: Hub
+        self,
+        hubs: list[Hub],
+        visu: Visualization,
+        new_hub: Hub,
     ) -> None:
         self.last_hub = self.current_hub
         self.current_hub = new_hub
@@ -90,7 +107,12 @@ class Drone:
         if new_hub.state == 2:
             self.is_on_end = True
 
-    def move(self, hubs: list[Hub], visu: Visualization, map_instance: Map) -> None:
+    def move(
+        self,
+        hubs: list[Hub],
+        visu: Visualization,
+        map_instance: Map,
+    ) -> None:
         if self.step >= len(self.true_way):
             return
         name_to_hub = {h.name: h for h in map_instance.hubs}
@@ -99,7 +121,12 @@ class Drone:
 
         if "-" in entry:
             name_a, name_b = entry.split("-")
-            self.enter_link(hubs, visu, name_to_hub[name_a], name_to_hub[name_b])
+            self.enter_link(
+                hubs,
+                visu,
+                name_to_hub[name_a],
+                name_to_hub[name_b],
+            )
             return
 
         new_hub = name_to_hub[entry]
@@ -129,10 +156,13 @@ class Drone:
         def link_free(a: str, b: str, turn: int, new_turn: int) -> bool:
             key = tuple(sorted((a, b)))
             return all(
-                occupancy[(k, *key)] < link_cap[key] for k in range(turn + 1, turn + 2)
+                occupancy[(k, *key)] < link_cap[key]
+                for k in range(turn + 1, turn + 2)
             )
 
-        came_from: dict[tuple[int, str], tuple[int, str] | None] = {(0, start): None}
+        came_from: dict[tuple[int, str], tuple[int, str] | None] = {
+            (0, start): None
+        }
         score: dict[tuple[int, str], int] = {(0, start): 0}
         queue: list[tuple[int, int, str]] = [(0, 0, start)]
         end: tuple[int, str] | None = None

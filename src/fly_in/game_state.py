@@ -37,7 +37,9 @@ class GameState:
             self.is_difficulty_select = True
             play_sound_assets(4)
 
-    def set_map_selector(self, current_dif: int, is_change: bool = True) -> None:
+    def set_map_selector(
+        self, current_dif: int, is_change: bool = True
+    ) -> None:
         if self.is_map_selection:
             self.is_map_selection = False
         else:

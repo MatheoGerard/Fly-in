@@ -55,9 +55,17 @@ def print_simulation(drones: list[Drone], start_name: str) -> None:
             current = d.true_way[turn]
             if current != previous:
                 moves.append(f"D{d.index}-{current}")
-        print(" ".join(moves), flush=True, file=open("text.txt", "a"))
+        print(
+            " ".join(moves),
+            flush=True,
+            file=open("text.txt", "a"),
+        )
 
-    print(f"Total : {nb_turns} tours", flush=True, file=open("text.txt", "a"))
+    print(
+        f"Total : {nb_turns} tours",
+        flush=True,
+        file=open("text.txt", "a"),
+    )
 
 
 if __name__ == "__main__":
@@ -77,7 +85,9 @@ if __name__ == "__main__":
 
         game_manager = GameState()
         main_menu_manager: MainMenu = MainMenu(
-            "textures/backrgound/PO_main_background.bmp", game_manager, 2
+            "textures/backrgound/PO_main_background.bmp",
+            game_manager,
+            2,
         )
         main_menu_manager.create_button()
         difficulty_select = SelectionDif()
@@ -115,7 +125,9 @@ if __name__ == "__main__":
                     if not map_instance.end_ok:
                         raise ValueError("multiple end!")
 
-                    occupancy: defaultdict[tuple[Any, ...], int] = defaultdict(int)
+                    occupancy: defaultdict[tuple[Any, ...], int] = defaultdict(
+                        int
+                    )
 
                     if nb_drone:
                         map_instance.start.current_nb_drone = nb_drone
@@ -124,7 +136,10 @@ if __name__ == "__main__":
                         d.current_position = d.start_position.copy()
                         d.dijsktra(map_instance, occupancy)
 
-                    print_simulation(map_instance.drones, map_instance.start.name)
+                    print_simulation(
+                        map_instance.drones,
+                        map_instance.start.name,
+                    )
                     is_parsed = True
 
                 vizualizer.draw_loop(

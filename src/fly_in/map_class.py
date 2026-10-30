@@ -26,7 +26,7 @@ class Map:
         i = 0
         while i < len(self.connexions):
             other_connexions: list[Connexion] = (
-                self.connexions[:i] + self.connexions[i + 1 :]
+                self.connexions[:i] + self.connexions[i + 1:]
             )
             for c in other_connexions:
                 if c.a == self.connexions[i].a and c.b == self.connexions[i].b:

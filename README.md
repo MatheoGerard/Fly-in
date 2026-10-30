@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by LOGIN.*
+*This project has been created as part of the 42 curriculum by mgerard.*
 
 # Fly-In
 
@@ -165,7 +165,7 @@ Drones are identical and start together, so the first drone gets the best route 
 ### Limits
 
 - Planning drone by drone is a *greedy* heuristic: the result depends on the order of the drones and is not guaranteed to be globally optimal (more advanced approaches exist, see Resources).
-- If no path exists within `max_turn`, the program prints `Aucun chemin disponible` and the drone does not move.
+- If no path exists within `max_turn`, the program prints `No path available` and the drone does not move.
 
 ### Results on the provided maps
 
@@ -256,14 +256,12 @@ A token with two hub names, like `D2-start-slow_path1`, means that the drone is 
 - [pydantic documentation](https://docs.pydantic.dev/)
 - [`parse` on PyPI](https://pypi.org/project/parse/)
 - [uv documentation](https://docs.astral.sh/uv/)
-- [Game Programming Patterns: Game Loop](https://gameprogrammingpatterns.com/game-loop.html), delta time and fixed frame rate
-- [PEP 8](https://peps.python.org/pep-0008/), [flake8](https://flake8.pycqa.org/) and [mypy](https://mypy.readthedocs.io/) documentation
+- https://en.wikipedia.org/wiki/Graph_theory
 
 ### Use of AI
 
 AI (Claude, by Anthropic) was used as an assistant for the following tasks:
 
-- **Drone animation**: design and implementation of the smooth movement (`Drone.animate`, frame time in `Visualization.update`, turn timer in `play_mode.py` replacing a blocking `sleep`), and its testing in a headless pygame session.
 - **Makefile**: the animated rainbow ASCII banner displayed by `make run`.
 - **Documentation**: drafting of this README, based on the source code.
 
