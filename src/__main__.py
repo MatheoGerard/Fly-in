@@ -66,6 +66,12 @@ if __name__ == "__main__":
 
         pg.init()
         pg.font.init()
+        pg.mixer.init()
+
+        pg.mixer.music.load("sound/04. Mechanical Complex.mp3")
+        pg.mixer.music.set_volume(0.2)
+
+        pg.mixer.music.play()
 
         is_parsed: bool = False
 
@@ -109,9 +115,7 @@ if __name__ == "__main__":
                     if not map_instance.end_ok:
                         raise ValueError("multiple end!")
 
-                    occupancy: defaultdict[tuple[Any, ...], int] = defaultdict(
-                        int
-                    )
+                    occupancy: defaultdict[tuple[Any, ...], int] = defaultdict(int)
 
                     if nb_drone:
                         map_instance.start.current_nb_drone = nb_drone
@@ -120,9 +124,7 @@ if __name__ == "__main__":
                         d.current_position = d.start_position.copy()
                         d.dijsktra(map_instance, occupancy)
 
-                    print_simulation(
-                        map_instance.drones, map_instance.start.name
-                    )
+                    print_simulation(map_instance.drones, map_instance.start.name)
                     is_parsed = True
 
                 vizualizer.draw_loop(

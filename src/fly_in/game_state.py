@@ -1,3 +1,6 @@
+from .sound_player import play_sound_assets
+
+
 class GameState:
     def __init__(self) -> None:
         self.game_running = True
@@ -25,18 +28,22 @@ class GameState:
             self.is_main_menu = False
         else:
             self.is_main_menu = True
+            play_sound_assets(4)
 
     def set_difficulty_select(self) -> None:
         if self.is_difficulty_select:
             self.is_difficulty_select = False
         else:
             self.is_difficulty_select = True
+            play_sound_assets(4)
 
-    def set_map_selector(self) -> None:
+    def set_map_selector(self, current_dif: int, is_change: bool = True) -> None:
         if self.is_map_selection:
             self.is_map_selection = False
         else:
             self.is_map_selection = True
+            if is_change:
+                play_sound_assets(current_dif)
 
     def set_in_map(self) -> None:
         if self.is_in_map:
