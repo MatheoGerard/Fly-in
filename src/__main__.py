@@ -64,7 +64,7 @@ def print_simulation(drones: list[Drone], start_name: str) -> None:
     print(
         f"Total : {nb_turns} tours",
         flush=True,
-        file=open("text.txt", "a"),
+        file=open("output.txt", "a"),
     )
 
 
