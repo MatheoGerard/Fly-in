@@ -17,6 +17,7 @@ class Map:
         self.drones: list[Drone] = self.create_drone()
         self.link_hubs()
         self.turn = 0
+        self.turn_timer: float = 0.0
         self.start.max_drone = self.nb_drone
         self.finish.max_drone = self.nb_drone
         self.connexions_validate()

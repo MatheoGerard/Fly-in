@@ -11,6 +11,8 @@ class Visualization:
     def __init__(self) -> None:
         self.screen_width: int = 1920
         self.screen_height: int = 1080
+        self.clock: pg.time.Clock = pg.time.Clock()
+        self.dt: float = 0.0
         self.screen = self.create_window()
 
     def create_window(self) -> pg.surface.Surface:
@@ -27,51 +29,33 @@ class Visualization:
 
         if current_dif == 0:
             if current_map == 0:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_meadow.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_meadow.bmp")
                 self.screen.blit(map_texture, (0, 0))
             elif current_map == 1:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_forest.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_forest.bmp")
                 self.screen.blit(map_texture, (0, 0))
             else:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_castle.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_castle.bmp")
                 self.screen.blit(map_texture, (0, 0))
         elif current_dif == 1:
             if current_map == 0:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_lava.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_lava.bmp")
                 self.screen.blit(map_texture, (0, 0))
             elif current_map == 1:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_volcano.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_volcano.bmp")
                 self.screen.blit(map_texture, (0, 0))
             else:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_prison.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_prison.bmp")
                 self.screen.blit(map_texture, (0, 0))
         elif current_dif == 2:
             if current_map == 0:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_graveyard.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_graveyard.bmp")
                 self.screen.blit(map_texture, (0, 0))
             elif current_map == 1:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_mansion.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_mansion.bmp")
                 self.screen.blit(map_texture, (0, 0))
             elif current_map == 2:
-                map_texture = pg.image.load(
-                    "textures/maps_textures/map_skull.bmp"
-                )
+                map_texture = pg.image.load("textures/maps_textures/map_skull.bmp")
                 self.screen.blit(map_texture, (0, 0))
         elif current_dif == 3:
             map_texture = pg.image.load("textures/maps_textures/map_moon.bmp")
@@ -84,42 +68,17 @@ class Visualization:
 
         for but in main_menu_manager.buttons:
             if but.is_selected:
-                self.screen.blit(
-                    arrow_img, (but.position[0], but.position[1] + 10)
-                )
-            # pg.draw.rect(
-            #     self.screen,
-            #     "black",
-            #     (but.position[0], but.position[1], but.dim[0], but.dim[1]),
-            # )
-            # but_txt = pg.font.SysFont("Comic Sans MS", 75)
-            # txt = but_txt.render(but.text, False, "white")
-            #
-            # self.screen.blit(
-            #     txt,
-            #     [
-            #         but.position[0]
-            #         + int(but.dim[0] / 2)
-            #         - int(txt.get_width() / 2),
-            #         but.position[1] + int(but.dim[1] / 2),
-            #     ],
-            # )
+                self.screen.blit(arrow_img, (but.position[0], but.position[1] + 10))
 
-    def draw_main_menu(
-        self, main_menu_manager: MainMenu, launch: bool = False
-    ) -> None:
+    def draw_main_menu(self, main_menu_manager: MainMenu, launch: bool = False) -> None:
         if launch:
             self.screen.blit(main_menu_manager.background, (0, 0))
             self.draw_menu_button(main_menu_manager)
 
-    def draw_select_dif(
-        self, select_dif_manager: SelectionDif, launch: bool
-    ) -> None:
+    def draw_select_dif(self, select_dif_manager: SelectionDif, launch: bool) -> None:
         if launch:
             self.screen.blit(
-                select_dif_manager.backgrounds[
-                    select_dif_manager.selection_state
-                ],
+                select_dif_manager.backgrounds[select_dif_manager.selection_state],
                 (0, 0),
             )
 
@@ -161,15 +120,12 @@ class Visualization:
             seen[key] = rank + 1
             dx = (rank % 5) * 14 - 28
             dy = (rank // 5) * 14 - 28
+            d.animate((key[0] + dx, key[1] + dy), self.dt)
             self.screen.blit(
                 d.texture,
                 (
-                    d.current_position[0]
-                    - int(d.texture.get_width() / 2)
-                    + dx,
-                    d.current_position[1]
-                    - int(d.texture.get_height() / 2)
-                    + dy,
+                    int(d.render_position[0] - d.texture.get_width() / 2),
+                    int(d.render_position[1] - d.texture.get_height() / 2),
                 ),
             )
 
@@ -210,9 +166,7 @@ class Visualization:
             [pos[0] - int(txt_surface.get_width() / 2), pos[1] + 30],
         )
 
-    def draw_connexions(
-        self, connection: list[Connexion], hubs: list[Hub]
-    ) -> None:
+    def draw_connexions(self, connection: list[Connexion], hubs: list[Hub]) -> None:
         offset_x, offset_y = self.find_true_positions(hubs)
         sub_value_x = min(hub.position[0] for hub in hubs)
         sub_value_y = min(hub.position[1] for hub in hubs)
@@ -245,6 +199,6 @@ class Visualization:
                 max((len(d.true_way) for d in map_instance.drones), default=0),
             )
 
-    @staticmethod
-    def update() -> None:
+    def update(self) -> None:
         pg.display.flip()
+        self.dt = min(self.clock.tick(60) / 1000, 0.1)
