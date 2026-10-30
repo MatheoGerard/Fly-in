@@ -58,7 +58,7 @@ def print_simulation(drones: list[Drone], start_name: str) -> None:
         print(
             " ".join(moves),
             flush=True,
-            file=open("text.txt", "a"),
+            file=open("output.txt", "a"),
         )
 
     print(

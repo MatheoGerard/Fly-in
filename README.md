@@ -217,7 +217,7 @@ connection: wide_area-goal [max_link_capacity=4]
 
 ### Expected output
 
-The solution is appended to `text.txt` in the current directory when the map is loaded. There is one line per turn, and each token is `D<drone>-<destination>`. A drone that does not move in a turn is not listed.
+The solution is appended to `output.txt` in the current directory when the map is loaded. There is one line per turn, and each token is `D<drone>-<destination>`. A drone that does not move in a turn is not listed.
 
 ```
 D0-bottleneck D1-bottleneck

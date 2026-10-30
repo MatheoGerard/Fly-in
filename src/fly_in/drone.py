@@ -203,7 +203,7 @@ class Drone:
                 heapq.heappush(queue, (new_turn, -new_score, nxt))
 
         if end is None:
-            print("Aucun chemin disponible")
+            print("No path available")
             self.true_way = []
             return
 
