@@ -19,6 +19,20 @@ class Map:
         self.turn = 0
         self.start.max_drone = self.nb_drone
         self.finish.max_drone = self.nb_drone
+        self.connexions_validate()
+
+    def connexions_validate(self) -> None:
+        i = 0
+        while i < len(self.connexions):
+            other_connexions: list[Connexion] = (
+                self.connexions[:i] + self.connexions[i + 1 :]
+            )
+            for c in other_connexions:
+                if c.a == self.connexions[i].a and c.b == self.connexions[i].b:
+                    raise ValueError("same connexion define twice!")
+                if c.a == self.connexions[i].b and c.b == self.connexions[i].a:
+                    raise ValueError("same connexion define twice!")
+            i += 1
 
     def link_hubs(self) -> None:
         for co in self.connexions:
@@ -35,10 +49,6 @@ class Map:
             )
 
         return drones
-
-    # def validate_nb_drone(self) -> None:
-    #     if self.nb_drone < 1:
-    #         raise ValueError("Not enough drone to begin!")
 
     def validate_start(self) -> bool:
         start_nb: int = 0
