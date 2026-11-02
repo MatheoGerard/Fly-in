@@ -53,7 +53,10 @@ class Parser(BaseModel):
             if line.strip().startswith("#") or not line.replace(" ", ""):
                 continue
             if line.startswith("nb_drones: "):
-                return int(parse.search("nb_drones: {:d}", line).fixed[0])
+                try:
+                    return int(parse.search("nb_drones: {:S}", line).fixed[0])
+                except Exception:
+                    raise ValueError("nb_drone not a valid value")
             else:
                 raise ValueError(
                     "definition of nb_drones must ne the very first line!"
@@ -86,6 +89,14 @@ class Parser(BaseModel):
                     "end_hub: {:S} {:d} {:d}", base.strip()
                 )
                 if meta:
+                    meta_clean = "["
+                    for c in meta:
+                        if c == "[" or c == "]":
+                            meta_clean += c
+                    if meta_clean != "[]":
+                        raise ValueError(
+                            f"'[{meta}' is not in a valid syntax!"
+                        )
                     optionnal = self.parse_meta(meta.strip("[]"))
 
                 new_hub: Hub = Hub(
