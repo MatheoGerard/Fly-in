@@ -148,6 +148,11 @@ class Parser(BaseModel):
                 mandatory = parse.parse(
                     "end_hub: {:S} {:S} {:S}", base.strip()
                 )
+                if mandatory is None:
+                    raise ValueError(
+                        "hub line  must be at least 'hub: <name> <x> <y> "
+                        "([meta_data...])'"
+                    )
                 try:
                     int(mandatory[1])
                 except Exception:
@@ -191,6 +196,11 @@ class Parser(BaseModel):
                 mandatory = parse.parse(
                     "start_hub: {:S} {:S} {:S}", base.strip()
                 )
+                if mandatory is None:
+                    raise ValueError(
+                        "hub line  must be at least 'hub: <name> <x> <y> "
+                        "([meta_data...])'"
+                    )
                 try:
                     int(mandatory[1])
                 except Exception:
@@ -206,6 +216,14 @@ class Parser(BaseModel):
                         " value for a position y"
                     )
                 if meta:
+                    meta_clean = "["
+                    for c in meta:
+                        if c == "[" or c == "]":
+                            meta_clean += c
+                    if meta_clean != "[]":
+                        raise ValueError(
+                            f"'[{meta}' is not in a valid syntax!"
+                        )
                     optionnal = self.parse_meta(meta.strip("[]"))
 
                 new_hub = Hub(
@@ -244,6 +262,14 @@ class Parser(BaseModel):
                         " for a position y"
                     )
                 if meta:
+                    meta_clean = "["
+                    for c in meta:
+                        if c == "[" or c == "]":
+                            meta_clean += c
+                    if meta_clean != "[]":
+                        raise ValueError(
+                            f"'[{meta}' is not in a valid syntax!"
+                        )
                     optionnal = self.parse_meta(meta.strip("[]"))
 
                 new_hub = Hub(
