@@ -65,14 +65,18 @@ class Parser(BaseModel):
 
         for word in meta.split(" "):
             if word.split("=")[0] not in meta_parsed.keys():
-                raise ValueError(f"{word.split('=')[0]} is not a valid meta data!")
+                raise ValueError(
+                    f"{word.split('=')[0]} is not a valid meta data!"
+                )
 
         if "color=" in meta:
             meta_parsed["color"] = parse.search("color={:w}", meta).fixed[0]
         if "zone=" in meta:
             meta_parsed["zone"] = parse.search("zone={:w}", meta).fixed[0]
         if "max_drones=" in meta:
-            meta_parsed["max_drones"] = parse.search("max_drones={:d}", meta).fixed[0]
+            meta_parsed["max_drones"] = parse.search(
+                "max_drones={:d}", meta
+            ).fixed[0]
 
         return meta_parsed
 
@@ -99,7 +103,9 @@ class Parser(BaseModel):
                 except Exception:
                     raise ValueError("nb_drone not a valid value")
             else:
-                raise ValueError("definition of nb_drones must be the very first line!")
+                raise ValueError(
+                    "definition of nb_drones must be the very first line!"
+                )
 
         return None
 
@@ -139,18 +145,22 @@ class Parser(BaseModel):
                     base, meta = line.split("[")
                 else:
                     base = line
-                mandatory = parse.parse("end_hub: {:S} {:S} {:S}", base.strip())
+                mandatory = parse.parse(
+                    "end_hub: {:S} {:S} {:S}", base.strip()
+                )
                 try:
                     int(mandatory[1])
                 except Exception:
                     raise ValueError(
-                        f"'{mandatory[1]}' is not a valid value for a position x"
+                        f"'{mandatory[1]}' is not a valid value"
+                        " for a position x"
                     )
                 try:
                     int(mandatory[2])
                 except Exception:
                     raise ValueError(
-                        f"'{mandatory[2]}' is not a valid value for a position y"
+                        f"'{mandatory[2]}' is not a valid value"
+                        " for a position y"
                     )
                 if meta:
                     meta_clean = "["
@@ -158,7 +168,9 @@ class Parser(BaseModel):
                         if c == "[" or c == "]":
                             meta_clean += c
                     if meta_clean != "[]":
-                        raise ValueError(f"'[{meta}' is not in a valid syntax!")
+                        raise ValueError(
+                            f"'[{meta}' is not in a valid syntax!"
+                        )
                     optionnal = self.parse_meta(meta.strip("[]"))
 
                 new_hub: Hub = Hub(
@@ -176,18 +188,22 @@ class Parser(BaseModel):
                     base, meta = line.split("[")
                 else:
                     base = line
-                mandatory = parse.parse("start_hub: {:S} {:S} {:S}", base.strip())
+                mandatory = parse.parse(
+                    "start_hub: {:S} {:S} {:S}", base.strip()
+                )
                 try:
                     int(mandatory[1])
                 except Exception:
                     raise ValueError(
-                        f"'{mandatory[1]}' is not a valid value for a position x"
+                        f"'{mandatory[1]}' is not a valid"
+                        " value for a position x"
                     )
                 try:
                     int(mandatory[2])
                 except Exception:
                     raise ValueError(
-                        f"'{mandatory[2]}' is not a valid value for a position y"
+                        f"'{mandatory[2]}' is not a valid"
+                        " value for a position y"
                     )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
@@ -217,13 +233,15 @@ class Parser(BaseModel):
                     int(mandatory[1])
                 except Exception:
                     raise ValueError(
-                        f"'{mandatory[1]}' is not a valid value for a position x"
+                        f"'{mandatory[1]}' is not a valid value"
+                        " for a position x"
                     )
                 try:
                     int(mandatory[2])
                 except Exception:
                     raise ValueError(
-                        f"'{mandatory[2]}' is not a valid value for a position y"
+                        f"'{mandatory[2]}' is not a valid value"
+                        " for a position y"
                     )
                 if meta:
                     optionnal = self.parse_meta(meta.strip("[]"))
@@ -240,7 +258,9 @@ class Parser(BaseModel):
 
         return hubs
 
-    def create_connexion(self, content: str, hubs: list[Hub]) -> list[Connexion]:
+    def create_connexion(
+        self, content: str, hubs: list[Hub]
+    ) -> list[Connexion]:
         """
         Create the connections defined in the map file.
 
@@ -273,7 +293,10 @@ class Parser(BaseModel):
                     base = line
 
                 if meta_link:
-                    if meta_link.strip("[]").split("=")[0] != "max_link_capacity":
+                    if (
+                        meta_link.strip("[]").split("=")[0]
+                        != "max_link_capacity"
+                    ):
                         raise ValueError(
                             "max_link_capacity must be define with "
                             "'max_link_capacity=...'"
@@ -285,7 +308,8 @@ class Parser(BaseModel):
                         int(link_capacity)
                     except Exception:
                         raise ValueError(
-                            f"{link_capacity} is not a valid value for a max_link_capacity"
+                            f"{link_capacity} is not a valid value"
+                            " for a max_link_capacity"
                         )
 
                 points = parse.parse("connection: {:S}-{:S}", base.strip())
@@ -302,7 +326,8 @@ class Parser(BaseModel):
 
                     if len(hubs_to_connected) != 2:
                         raise ValueError(
-                            "Impossible to create a connexion between hubs not exist"
+                            "Impossible to create a connexion"
+                            " between hubs not exist"
                         )
                     new_connexion = Connexion(
                         a=hubs_to_connected[0],
