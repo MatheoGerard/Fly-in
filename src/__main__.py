@@ -1,3 +1,10 @@
+"""
+Entry point of the Fly-In application.
+
+Initializes pygame, then runs the main loop: menu navigation, map selection,
+drone path computation and rendering.
+"""
+
 import pygame as pg
 from typing import Any
 from fly_in import Visualization as vizu
@@ -21,6 +28,13 @@ from fly_in.hub import Hub
 
 
 def load_maps() -> list[list[str]]:
+    """
+    Build the list of map file paths grouped by difficulty.
+
+    Returns:
+        A list of four lists of map file paths, in this order: easy, medium,
+        hard and challenger.
+    """
     easy: list[str] = []
     medium: list[str] = []
     hard: list[str] = []
@@ -44,6 +58,18 @@ def load_maps() -> list[list[str]]:
 
 
 def print_simulation(drones: list[Drone], start_name: str) -> None:
+    """
+    Append the moves of every drone, turn by turn, to ``output.txt``.
+
+    Each turn is written on one line containing the moves made during that
+    turn, formatted as ``D<index>-<destination>``. A last line gives the total
+    number of turns.
+
+    Args:
+        drones: Drones whose computed paths (``true_way``) are printed.
+        start_name: Name of the start hub, used as the previous position for
+            the first turn.
+    """
     nb_turns = max((len(d.true_way) for d in drones), default=0)
 
     for turn in range(nb_turns):

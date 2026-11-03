@@ -1,3 +1,9 @@
+"""
+Fly-In package.
+
+Re-exports the main classes and functions of the project.
+"""
+
 from .display import Visualization
 from .maps_parser import Parser
 from .map_class import Map

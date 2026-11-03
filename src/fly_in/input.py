@@ -1,3 +1,7 @@
+"""
+Keyboard and mouse input handling.
+"""
+
 import pygame as pg
 from .display import Visualization
 from .hub import Hub
@@ -7,6 +11,13 @@ from .map_class import Map
 
 
 def mouse_hover(dis: Visualization, hubs: list[Hub]) -> None:
+    """
+    Draw the name of the hub hovered by the mouse cursor.
+
+    Args:
+        dis: Visualization used to draw the name.
+        hubs: Hubs of the map.
+    """
     offset_x, offset_y = dis.find_true_positions(hubs)
     sub_value_x = min(hub.position[0] for hub in hubs)
     sub_value_y = min(hub.position[1] for hub in hubs)
@@ -34,6 +45,9 @@ def mouse_hover(dis: Visualization, hubs: list[Hub]) -> None:
 
 
 def space_input() -> None:
+    """
+    Toggle the fullscreen mode.
+    """
     pg.display.toggle_fullscreen()
 
 
@@ -42,6 +56,18 @@ def escape_input(
     map_selector: SelectionMap,
     dif_select_manager: SelectionDif,
 ) -> None:
+    """
+    Go back to the previous screen.
+
+    From the difficulty selection the main menu is shown, from the map
+    selection the difficulty selection is shown and from a map the map
+    selection is shown.
+
+    Args:
+        game_manager: State of the game.
+        map_selector: Map selection, reset to its first map.
+        dif_select_manager: Difficulty selection.
+    """
     if game_manager.is_difficulty_select:
         game_manager.set_difficulty_select()
         game_manager.set_main_menu()
@@ -62,6 +88,16 @@ def return_input(
     main_menu_manager: MainMenu,
     dif_select_manager: SelectionDif,
 ) -> None:
+    """
+    Validate the current choice and go to the next screen.
+
+    The program exits if the quit button of the main menu is selected.
+
+    Args:
+        game_manager: State of the game.
+        main_menu_manager: Main menu.
+        dif_select_manager: Difficulty selection.
+    """
     if game_manager.is_main_menu:
         if main_menu_manager.selection_state == 1:
             exit()
@@ -76,6 +112,12 @@ def return_input(
 
 
 def p_input(game_manager: GameState) -> None:
+    """
+    Toggle the play mode if a map is displayed.
+
+    Args:
+        game_manager: State of the game.
+    """
     if game_manager.is_in_map:
         game_manager.set_play_mode()
 
@@ -88,6 +130,21 @@ def read_input(
     map_instance: Map | None,
     visu: Visualization,
 ) -> None:
+    """
+    Handle the keyboard events of the current frame.
+
+    P toggles the play mode, the up and down arrows change the selection (or
+    play a step in a map), Enter validates, Escape goes back and Space toggles
+    the fullscreen. Any other key is printed.
+
+    Args:
+        game_manager: State of the game.
+        main_menu_manager: Main menu.
+        dif_select_manager: Difficulty selection.
+        map_selector: Map selection.
+        map_instance: Current map, or None if no map is loaded.
+        visu: Visualization used to move the drones.
+    """
     events = pg.event.get()
 
     for event in events:

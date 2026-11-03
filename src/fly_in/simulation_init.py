@@ -1,3 +1,7 @@
+"""
+Initialization of a simulation from a map file.
+"""
+
 from .hub import Hub as Hub
 from .maps_parser import Parser
 from .connexion import Connexion
@@ -7,6 +11,21 @@ from .map_class import Map
 def simu_init(
     file_name: str,
 ) -> tuple[int | None, list[Hub], list[Connexion], Map]:
+    """
+    Read a map file and build the hubs, connections and map.
+
+    The cost of every hub is defined once the map is created.
+
+    Args:
+        file_name: Path of the map file to read.
+
+    Returns:
+        A tuple ``(nb_drone, hubs, connexions, map_instance)``.
+
+    Raises:
+        ValueError: If the file does not define ``nb_drones`` or defines less
+            than one drone, or if the map content is not valid.
+    """
     pars: Parser = Parser(file_name=file_name)
 
     content: str = pars.read_map_file()

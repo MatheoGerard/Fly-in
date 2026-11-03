@@ -1,3 +1,7 @@
+"""
+Parser of the map files.
+"""
+
 import parse
 from pydantic import BaseModel
 from .hub import Hub
@@ -5,9 +9,23 @@ from .connexion import Connexion
 
 
 class Parser(BaseModel):
+    """
+    Parse a map file into hubs and connections.
+
+    Attributes:
+        file_name: Path of the map file.
+    """
+
     file_name: str
 
     def read_map_file(self) -> str:
+        """
+        Read the map file.
+
+        Returns:
+            The content of the file, or an empty string if it cannot be read
+            (the error is printed).
+        """
         try:
             with open(self.file_name, "r") as file:
                 return file.read()
@@ -22,6 +40,20 @@ class Parser(BaseModel):
             return ""
 
     def parse_meta(self, meta: str) -> dict[str, str]:
+        """
+        Parse the metadata of a hub.
+
+        Args:
+            meta: Metadata without brackets, for example ``color=red
+                zone=priority max_drones=2``.
+
+        Returns:
+            A dictionary with the keys ``color``, ``max_drones`` and ``zone``,
+            filled with default values for missing metadata.
+
+        Raises:
+            ValueError: If a metadata name is not valid.
+        """
         meta_parsed: dict[str, str] = {
             "color": "none",
             "max_drones": "1",
@@ -45,6 +77,19 @@ class Parser(BaseModel):
         return meta_parsed
 
     def find_nb_drones(self, content: str) -> int | None:
+        """
+        Find the number of drones defined in the map file.
+
+        Args:
+            content: Content of the map file.
+
+        Returns:
+            The number of drones, or None if the file has no meaningful line.
+
+        Raises:
+            ValueError: If the first meaningful line is not ``nb_drones:
+                <value>`` or if the value is not valid.
+        """
         for line in content.splitlines():
             if line.strip().startswith("#") or not line.replace(" ", ""):
                 continue
@@ -54,11 +99,26 @@ class Parser(BaseModel):
                 except Exception:
                     raise ValueError("nb_drone not a valid value")
             else:
-                raise ValueError("definition of nb_drones must ne the very first line!")
+                raise ValueError("definition of nb_drones must be the very first line!")
 
         return None
 
     def create_hub(self, content: str) -> list[Hub]:
+        """
+        Create the hubs defined in the map file.
+
+        The ``start_hub``, ``hub`` and ``end_hub`` lines are parsed. Comment
+        lines are ignored.
+
+        Args:
+            content: Content of the map file.
+
+        Returns:
+            The list of created hubs.
+
+        Raises:
+            ValueError: If a line, its position or its metadata is not valid.
+        """
         hubs: list[Hub] = []
         base: str = ""
         meta: str = ""
@@ -181,6 +241,23 @@ class Parser(BaseModel):
         return hubs
 
     def create_connexion(self, content: str, hubs: list[Hub]) -> list[Connexion]:
+        """
+        Create the connections defined in the map file.
+
+        Each ``connection`` line links two existing hubs and may set
+        ``max_link_capacity``.
+
+        Args:
+            content: Content of the map file.
+            hubs: Hubs the connections refer to.
+
+        Returns:
+            The list of created connections.
+
+        Raises:
+            ValueError: If the metadata or the link capacity is not valid, if
+                several hubs share a name or if a hub does not exist.
+        """
         connexions: list[Connexion] = []
         base: str = ""
         meta_link: str = ""

@@ -1,7 +1,19 @@
+"""
+Music playback helpers.
+"""
+
 import pygame as pg
 
 
 def play_sound_assets(index_sound: int) -> None:
+    """
+    Load and play the music matching an index.
+
+    Args:
+        index_sound: Index of the music: 0 for Space Adventure, 1 for Last
+            Mission, 2 for Jester Theme, 3 for Rush Point and 4 for Mechanical
+            Complex.
+    """
     match index_sound:
         case 1:
             pg.mixer.music.load("sound/05. Last Mission.mp3")
