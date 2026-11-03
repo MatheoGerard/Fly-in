@@ -293,6 +293,14 @@ class Parser(BaseModel):
                     base = line
 
                 if meta_link:
+                    meta_clean = "["
+                    for c in meta_link:
+                        if c == "[" or c == "]":
+                            meta_clean += c
+                    if meta_clean != "[]":
+                        raise ValueError(
+                            f"'[{meta_link}' is not in a valid syntax!"
+                        )
                     if (
                         meta_link.strip("[]").split("=")[0]
                         != "max_link_capacity"
@@ -315,6 +323,11 @@ class Parser(BaseModel):
                 points = parse.parse("connection: {:S}-{:S}", base.strip())
 
                 hubs_to_connected = []
+
+                if not points:
+                    raise ValueError(
+                        f"'{line}' is not a valid definition of a connection"
+                    )
 
                 if points:
                     for point in points:
